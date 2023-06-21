@@ -30,11 +30,14 @@
                                 placeholder="Ex: abc@gmail.com" id="email">
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.email">
+                                <!-- userForm.get('email')?.dirty: field 'email' was changed? -->
+                                <!-- userForm.get('email')?.touched: field 'email' lost focus? -->
                                 <div *ngIf="userForm.get('email')?.hasError(e.type) && 
                                     (userForm.get('email')?.dirty || userForm.get('email')?.touched)">
 
                                     <small>{{e.message}}</small>
                                 </div>
+                                
                             </div>
                         </div>
                     </div>

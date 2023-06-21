@@ -16,20 +16,39 @@ import { CustomValidator } from 'src/app/validator/CustomValidator';
 })
 export class CheckoutComponent implements OnInit {
 
-  private readonly notifier: NotifierService | undefined;
+  // allow display spinner icon or not
+  // =true: allow to display spinner in the "Purchase" button
+  // =false: does not allow to display spinner in the "Purchase" button
+  showSpinner: boolean = false;
 
-  checkoutFormGroup!: FormGroup;
+  checkoutForm!: FormGroup;
 
   totalPrice: number = 0;
   totalQuantity: number = 0;
 
   storage: Storage = sessionStorage;
 
+  // error messages
   errorMessages = {
-    fullname: [
-      { type: 'required', message: 'Please input fullname' },
-      { type: 'minlength', message: 'Fullname must be at least 2 characters long' },
-      { type: 'maxlength', message: 'Fullname cannot be longer than 100 characters' }
+    email: [
+      { type: 'required', message: 'Please input an email' },
+      { type: 'pattern', message: 'Email is incorrect format' }
+    ],
+    firstName: [
+      { type: 'required', message: 'Please input the first name' },
+      { type: 'maxlength', message: 'First name cannot be longer than 50 characters' },
+    ],
+    lastName: [
+      { type: 'required', message: 'Please input the last name' },
+      { type: 'maxlength', message: 'Last name cannot be longer than 50 characters' },
+    ],
+    phone: [
+      { type: 'required', message: 'Please input phone number' },
+      { type: 'pattern', message: 'Phone number must be 10 digits length' }
+    ],
+    shippingAddress: [
+      { type: 'required', message: 'Please input shipping address' },
+      { type: 'maxlength', message: 'Shipping address cannot be longer than 100 characters' }
     ]
   };
 
@@ -46,36 +65,46 @@ export class CheckoutComponent implements OnInit {
     this.reviewCartDetails();
 
     // read the user's email address from browser storage
-    const theEmail = JSON.parse(this.storage.getItem('userEmail')!);
+    // const theEmail = JSON.parse(this.storage.getItem('userEmail')!);
 
-    this.checkoutFormGroup = this.formBuilder.group({
-      fullname: ['',
-        [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(100),
-          CustomValidator.notOnlyWhitespace
-        ]
-      ],
-
-      email: [theEmail,
-        [Validators.required,
-        Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}')]
-      ],
-
-      phone: ['',
-        [Validators.required,
-        Validators.pattern('[0-9]{10,11}')]
-      ],
-
-      shippingAddress: ['',
-        [Validators.required,
-        Validators.minLength(2),
-        CustomValidator.notOnlyWhitespace]
-      ]
-    });
+    // initial form
+    this.initForm();
 
   }
+
+  // initial form
+  initForm() {
+
+    this.checkoutForm = this.formBuilder.group({
+
+      // required and must be in correct format 
+      email: ['',
+        [Validators.required,
+        Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+
+      // required and max length = 50 characters
+      firstName: ['',
+        [Validators.required,
+        Validators.maxLength(50)]],
+
+      // required and max length = 50 characters
+      lastName: ['',
+        [Validators.required,
+        Validators.maxLength(50)]],
+
+      // required and length must be 10 digits
+      phone: ['',
+        [Validators.required,
+        Validators.pattern("^[0-9]{10}$")]],
+
+      // required and max length = 100 characters
+      shippingAddress: ['',
+        [Validators.required,
+        Validators.maxLength(100)]],
+
+    });
+
+  } // end of initForm()
 
   reviewCartDetails() {
 
@@ -91,16 +120,18 @@ export class CheckoutComponent implements OnInit {
 
   }
 
-  // get fullname() { return this.checkoutFormGroup!.get('customer.fullname'); }
-  // get email() { return this.checkoutFormGroup!.get('customer.email'); }
-  // get phone() { return this.checkoutFormGroup!.get('customer.phone'); }
-  // get shippingAddress() { return this.checkoutFormGroup!.get('customer.shippingAddress'); }
+  // define getters
+  get email() { return this.checkoutForm.get('email'); }
+  get firstName() { return this.checkoutForm.get('firstName'); }
+  get lastName() { return this.checkoutForm.get('lastName'); }
+  get phone() { return this.checkoutForm.get('phone'); }
+  get shippingAddress() { return this.checkoutForm.get('shippingAddress'); }
 
-  onSubmit() {
+  purchase() {
     console.log("Handling the submit button");
 
-    if (this.checkoutFormGroup!.invalid) {
-      this.checkoutFormGroup!.markAllAsTouched();
+    if (this.checkoutForm.invalid) {
+      this.checkoutForm.markAllAsTouched();
       return;
     }
 
@@ -159,7 +190,7 @@ export class CheckoutComponent implements OnInit {
     this.cartService.totalQuantity.next(0);
 
     // reset the form
-    this.checkoutFormGroup!.reset();
+    this.checkoutForm!.reset();
 
     // navigate back to the product page
     this.router.navigateByUrl("/products");
