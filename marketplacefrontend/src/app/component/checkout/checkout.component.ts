@@ -75,8 +75,6 @@ export class CheckoutComponent implements OnInit {
       ]
     });
 
-    // this.notifier!.notify('success', 'You are awesome! I mean it!');
-
   }
 
   reviewCartDetails() {

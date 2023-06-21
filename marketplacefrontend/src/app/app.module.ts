@@ -12,7 +12,6 @@ import { CartDetailComponent } from './component/cart-detail/cart-detail.compone
 import { CartStatusComponent } from './component/cart-status/cart-status.component';
 import { CheckoutComponent } from './component/checkout/checkout.component';
 import { ProductDetailComponent } from './component/product-detail/product-detail.component';
-import { SearchComponent } from './component/search/search.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UserCreateComponent } from './component/user-create/user-create.component';
@@ -33,7 +32,6 @@ import { AuthInterceptor } from './interceptor/auth.interceptor';
     CartStatusComponent,
     CheckoutComponent,
     ProductDetailComponent,
-    SearchComponent,
     UserCreateComponent,
     LoginComponent,
     EditProfileComponent
