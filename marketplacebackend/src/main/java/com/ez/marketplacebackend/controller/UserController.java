@@ -1,0 +1,166 @@
+package com.ez.marketplacebackend.controller;
+
+import com.ez.marketplacebackend.entity.User;
+import com.ez.marketplacebackend.entity.UserPrincipal;
+import com.ez.marketplacebackend.exception.BadDataException;
+import com.ez.marketplacebackend.exception.ExceptionHandling;
+import com.ez.marketplacebackend.payload.EditProfile;
+import com.ez.marketplacebackend.payload.HttpResponse;
+import com.ez.marketplacebackend.payload.LoginUser;
+import com.ez.marketplacebackend.service.UserService;
+import com.ez.marketplacebackend.utility.JWTTokenProvider;
+import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
+
+import java.util.List;
+
+import static com.ez.marketplacebackend.constant.Constant.*;
+import static org.springframework.http.HttpStatus.OK;
+
+@RestController
+public class UserController extends ExceptionHandling {
+
+    private Logger LOGGER = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private JWTTokenProvider jwtTokenProvider;
+
+    // customer logins to the MarketPlace system.
+    // all users can access this end point "/login"
+    @PostMapping("/login")
+    public ResponseEntity<User> login(@RequestBody @Valid LoginUser loginUser, BindingResult bindingResult)
+            throws BindException, BadDataException {
+
+        LOGGER.info("validate data");
+
+        // if loginUser data is invalid then throw exception
+        if (bindingResult.hasErrors()) {
+
+            LOGGER.info("LoginUser data is invalid");
+
+            throw new BindException(bindingResult);
+        }
+
+        // if user is inactive then show error to user
+        if (userService.isInactiveUser(loginUser.getEmail()) != null) {
+
+            LOGGER.info("User is inactive");
+
+            throw new BadDataException(USER_IS_INACTIVE);
+        }
+
+        // if username or password is invalid then throw an exception
+        authenticate(loginUser.getEmail(), loginUser.getPassword());
+
+        // authenticate success(username and password are correct)
+        User user = userService.findUserByEmail(loginUser.getEmail());
+
+        // get the generated JWT and send back to client
+        UserPrincipal userPrincipal = new UserPrincipal(user);
+        HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
+
+        // return user(body), jwt token(header) and status
+        return new ResponseEntity<>(user, jwtHeader, OK);
+    }
+
+    // create new customer(customer signs up account).
+    // all users can access this end point "/user-create"
+    @PostMapping("/user-create")
+    public ResponseEntity<User> createUser(@RequestBody @Valid User user, BindingResult bindingResult)
+            throws BadDataException, MessagingException, BindException {
+
+        LOGGER.info("validate data");
+
+        // if user data is invalid then throw exception
+        if (bindingResult.hasErrors()) {
+
+            LOGGER.info("Customer data is invalid");
+
+            throw new BindException(bindingResult);
+        }
+
+        User newUser = userService.createUser(user);
+
+        return new ResponseEntity<>(newUser, OK);
+    }
+
+    // find user by id.
+    // this method is used for Edit Profile.
+    @GetMapping("/user-list/{id}")
+    // only authenticated users can access this end point "/user-list/{id}"
+    // (it means this function findById())
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
+    public ResponseEntity<User> findById(@PathVariable Long id) throws EntityNotFoundException {
+
+        LOGGER.info("find user by id: " + id);
+
+        User user = userService.findById(id);
+
+        return new ResponseEntity<>(user, OK);
+    }
+
+    // update user profile.
+    @PutMapping("/edit-profile")
+    // only authenticated users can access this end point "/edit-profile"
+    // (it means this function updateProfile())
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
+    public ResponseEntity<User> updateProfile(@RequestBody @Valid EditProfile editProfile, BindingResult bindingResult)
+            throws MessagingException, EntityNotFoundException, BindException {
+
+        LOGGER.info("validate data");
+
+        // if user data is invalid then throw exception
+        if (bindingResult.hasErrors()) {
+
+            LOGGER.info("User data is invalid");
+
+            throw new BindException(bindingResult);
+        }
+
+        User currentUser = userService.updateProfile(editProfile);
+
+        return new ResponseEntity<>(currentUser, OK);
+    }
+
+    // create new instance HttpResponse
+    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String message) {
+
+        return new ResponseEntity<>(new HttpResponse(httpStatus.value(), message), httpStatus);
+    }
+
+    // get header with JWT token.
+    // use this header to send back client
+    private HttpHeaders getJwtHeader(UserPrincipal user) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(JWT_TOKEN_HEADER, jwtTokenProvider.generateJwtToken(user));
+
+        return headers;
+    }
+
+    // authenticate email and password sent from client is valid or not
+    private void authenticate(String email, String password) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+    }
+
+}
