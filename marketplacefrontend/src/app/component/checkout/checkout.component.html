@@ -1,0 +1,73 @@
+<div class="text-center" style="margin-top:70px">
+    <!-- title -->
+    <h3>Checkout</h3>
+    <hr width="510px">
+</div>
+
+<!-- {{checkoutFormGroup.value | json}} -->
+
+<div class="container-fluid">
+
+    <!-- call the function onSubmit() when user clicks on the "Purchase" button -->
+    <form [formGroup]="checkoutFormGroup" (ngSubmit)="onSubmit()">
+        <div class="row mt-5">
+
+            <!-- move column to central -->
+            <div class="col-md-6 offset-md-3">
+                <div class="container">
+
+                    <!-- Fullname -->
+                    <div class="row mb-3">
+
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="fullname">Fullname<small
+                                    class="text-danger">*</small></label>
+                        </div>
+
+                        <!-- textbox -->
+                        <div class="col-9">
+                            <input class="form-control" type="text" formControlName="fullname" placeholder="Full name"
+                                id="fullname">
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.fullname">
+                                <!-- errors on the "fullname" field -->
+                                <div *ngIf="checkoutFormGroup.get('fullname')?.hasError(e.type) && 
+                                    (checkoutFormGroup.get('fullname')?.dirty || 
+                                    checkoutFormGroup.get('fullname')?.touched)">
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- buttons -->
+        <div class="d-flex justify-content-center">
+            <div>
+                <!-- the "Purchase" button -->
+                <!-- if the form values are invalid then disable the "Purchase" button -->
+                <button type="submit" [disabled]="checkoutFormGroup.invalid" style="width: 150px"
+                    class="btn btn-primary mr-2">
+
+                    <!-- display the spinner icon when press the "Save" button -->
+                    <!-- <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i> -->
+                    <!-- Change label button "Save" to "Saving.." -->
+                    <!-- <span *ngIf="showSpinner">Saving...</span> -->
+                    <!-- after save the category then re-changes button name to "Save" -->
+                    <!-- <span *ngIf="!showSpinner">Save</span> -->
+
+                </button>
+
+                <!-- the "Cancel" button -->
+                <!-- re-direct to the "category-list" page -->
+                <button class="btn btn-dark" routerLink="/category-list" style="width: 150px"
+                    tooltip="Cancel and go back to the 'Category list' screen" theme="light"
+                    placement="bottom">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>

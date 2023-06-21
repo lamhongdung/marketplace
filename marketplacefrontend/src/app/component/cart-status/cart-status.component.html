@@ -1,0 +1,16 @@
+<li class="nav-item text-dark">
+    <a class="nav-link" routerLink="/cart-detail">
+        <i class="fa fa-shopping-cart text-light" aria-hidden="true">
+
+            <!-- total quantity -->
+            <span class="badge badge-notify">
+                {{ totalQuantity }}
+            </span>
+
+            <!-- order amount -->
+            <span class="badge bg-danger">
+                {{ totalPrice | currency: 'VND' }}
+            </span>
+        </i>
+    </a>
+</li>

@@ -1,0 +1,28 @@
+<div class="container-fluid">
+
+    <!-- product image -->
+    <img src="{{ product.imageUrl }}" style="width: 18%;">
+
+    <!-- product name -->
+    <h3>{{ product.name }}</h3>
+
+    <!-- product price -->
+    <div>
+        <p style="color:blue">{{ product.unitPrice | currency:'VND' }}</p>
+    </div>
+
+    <!-- "Add to cart" button -->
+    <button (click)=addToCart() class="btn btn-primary btn-sm">
+        Add to cart
+    </button>
+
+    <hr>
+
+    <!-- product description -->
+    <h4>Description</h4>
+    <p>{{ product.description }}</p>
+
+    <!-- "Back to product list" link -->
+    <a routerLink="/product-list" class="mt-5">Back to Product List</a>
+
+</div>
