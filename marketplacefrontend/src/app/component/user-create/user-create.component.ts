@@ -6,6 +6,7 @@ import { NotifierService } from 'angular-notifier';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { User } from 'src/app/payload/user';
 import { UserService } from 'src/app/service/user.service';
+import { CustomValidator } from 'src/app/validator/CustomValidator';
 
 @Component({
   selector: 'app-user-create',
@@ -32,10 +33,12 @@ export class UserCreateComponent implements OnInit {
     ],
     firstName: [
       { type: 'required', message: 'Please input the first name' },
+      { type: 'allWhitespace', message: 'First name does not allow all white spaces' },
       { type: 'maxlength', message: 'First name cannot be longer than 50 characters' },
     ],
     lastName: [
       { type: 'required', message: 'Please input the last name' },
+      { type: 'allWhitespace', message: 'Last name does not allow all white spaces' },
       { type: 'maxlength', message: 'Last name cannot be longer than 50 characters' },
     ],
     phone: [
@@ -44,11 +47,13 @@ export class UserCreateComponent implements OnInit {
     ],
     shippingAddress: [
       { type: 'required', message: 'Please input the shipping address' },
+      { type: 'allWhitespace', message: 'Shipping address does not allow all white spaces' },
       { type: 'maxlength', message: 'Shipping Address cannot be longer than 100 characters' }
     ]
   };
 
-  constructor(private router: Router,
+  constructor(
+    private router: Router,
     private userService: UserService,
     private formBuilder: FormBuilder,
     private notifierService: NotifierService
@@ -74,16 +79,16 @@ export class UserCreateComponent implements OnInit {
       password: ['', [Validators.required]],
 
       // required and max length = 50 characters
-      firstName: ['', [Validators.required, Validators.maxLength(50)]],
+      firstName: ['', [Validators.required, CustomValidator.allWhitespace, Validators.maxLength(50)]],
 
       // required and max length = 50 characters
-      lastName: ['', [Validators.required, Validators.maxLength(50)]],
+      lastName: ['', [Validators.required, CustomValidator.allWhitespace, Validators.maxLength(50)]],
 
       // required and length must be 10 digits
       phone: ['', [Validators.required, Validators.pattern("^[0-9]{10}$")]],
 
       // required and max length = 100 characters
-      shippingAddress: ['', [Validators.required, Validators.maxLength(100)]],
+      shippingAddress: ['', [Validators.required, CustomValidator.allWhitespace, Validators.maxLength(100)]],
 
     });
 

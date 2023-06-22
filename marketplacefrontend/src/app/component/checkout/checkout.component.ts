@@ -62,13 +62,15 @@ export class CheckoutComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.reviewCartDetails();
+
 
     // read the user's email address from browser storage
     // const theEmail = JSON.parse(this.storage.getItem('userEmail')!);
 
     // initial form
     this.initForm();
+
+    this.reviewCartDetails();
 
   }
 

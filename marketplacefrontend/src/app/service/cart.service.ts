@@ -12,12 +12,16 @@ export class CartService {
 
   // initial value of totalQuantity = 0.
   // Subject is a subclass of observable.
-  // We use Subject to publish events to all of the subscribers.
+  // BehaviorSubject is a subclass of Subject.
+  // When there is a certain subcriber subscribes to BehaviorSubject then
+  // BehaviorSubject will publish latest value(not include passed values) to subscribers.
   totalQuantity: Subject<number> = new BehaviorSubject<number>(0);
 
   // initial value of totalPrice = 0.
   // Subject is a subclass of observable.
-  // We use Subject to publish events to all of the subscribers.
+  // BehaviorSubject is a subclass of Subject.
+  // When there is a certain subcriber subscribes to BehaviorSubject then
+  // BehaviorSubject will publish latest value(not include passed values) to subscribers.
   totalPrice: Subject<number> = new BehaviorSubject<number>(0);
 
   // 

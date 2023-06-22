@@ -2,14 +2,16 @@ import { FormControl, ValidationErrors } from "@angular/forms";
 
 export class CustomValidator {
 
-    // whitespace validation
-    static notOnlyWhitespace(control: FormControl): ValidationErrors | null {
+    // whitespace validation.
+    // if (control only contain white spaces) then control is invalid.
+    // else control is valid.
+    static allWhitespace(control: FormControl): ValidationErrors | null {
 
         // check if string only contains whitespace
-        if ((control.value != null) && (control.value.trim().length === 0)) {
+        if ((control.value != null) && (control.value.length > 0) && (control.value.trim().length === 0)) {
 
             // invalid, return error object
-            return { notOnlyWhitespace: true };
+            return { allWhitespace: true };
         }
         else {
             // valid, return null

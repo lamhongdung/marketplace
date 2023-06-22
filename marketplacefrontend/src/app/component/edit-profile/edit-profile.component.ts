@@ -9,6 +9,7 @@ import { EditProfile } from 'src/app/payload/EditProfile';
 import { User } from 'src/app/payload/user';
 import { AuthService } from 'src/app/service/auth.service';
 import { UserService } from 'src/app/service/user.service';
+import { CustomValidator } from 'src/app/validator/CustomValidator';
 
 @Component({
   selector: 'app-edit-profile',
@@ -50,10 +51,12 @@ export class EditProfileComponent implements OnInit {
   errorMessages = {
     firstName: [
       { type: 'required', message: 'Please input the first name' },
+      { type: 'allWhitespace', message: 'First name does not allow all white spaces' },
       { type: 'maxlength', message: 'First name cannot be longer than 50 characters' },
     ],
     lastName: [
       { type: 'required', message: 'Please input the last name' },
+      { type: 'allWhitespace', message: 'Last name does not allow all white spaces' },
       { type: 'maxlength', message: 'Last name cannot be longer than 50 characters' },
     ],
     phone: [
@@ -62,6 +65,7 @@ export class EditProfileComponent implements OnInit {
     ],
     shippingAddress: [
       { type: 'required', message: 'Please input shipping address' },
+      { type: 'allWhitespace', message: 'Shipping address does not allow all white spaces' },
       { type: 'maxlength', message: 'Shipping address cannot be longer than 100 characters' }
     ]
   };
@@ -124,10 +128,14 @@ export class EditProfileComponent implements OnInit {
 
         email: [''],
 
-        firstName: ['', [Validators.required, Validators.maxLength(50)]],
-        lastName: ['', [Validators.required, Validators.maxLength(50)]],
-        phone: ['', [Validators.required, Validators.pattern("^[0-9]{10}$")]],
-        shippingAddress: ['', [Validators.required, Validators.maxLength(100)]],
+        firstName: ['',
+          [Validators.required, CustomValidator.allWhitespace, Validators.maxLength(50)]],
+        lastName: ['',
+          [Validators.required, CustomValidator.allWhitespace, Validators.maxLength(50)]],
+        phone: ['',
+          [Validators.required, Validators.pattern("^[0-9]{10}$")]],
+        shippingAddress: ['',
+          [Validators.required, CustomValidator.allWhitespace, Validators.maxLength(100)]],
       }
     );
   } // end of initForm()

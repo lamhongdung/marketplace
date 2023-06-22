@@ -1,131 +1,177 @@
 <div class="text-center">
-    <!-- title -->
     <h3>Checkout</h3>
-    <hr width="700px">
+    <hr width="100%">
 </div>
 
 <!-- {{checkoutForm.value | json}} -->
 
-<div class="container">
+<div class="container-fluid">
 
     <!-- call the function purchase() when user clicks the "purchase" button -->
     <form [formGroup]="checkoutForm" (ngSubmit)="purchase()">
+
         <div class="row mt-5">
 
-            <!-- move column to central -->
-            <div class="col-md-8 offset-md-2">
-                <div class="container">
+            <!-- the "Left" column -->
+            <div class="col-md-7">
+                <div class="container-fluid">
 
-                    <!-- Email -->
-                    <div class="row mb-3">
-                        <!-- label -->
-                        <div class="col-3">
-                            <label class="col-form-label" for="email">
-                                Email<small>*</small>
-                            </label>
-                        </div>
-                        <!-- textbox -->
-                        <div class="col-9">
-                            <input class="form-control" type="email" formControlName="email" id="email" readonly>
-                        </div>
-                    </div>
+                    <!-- customer information -->
+                    <div class="form-area">
+                        <h4>Customer</h4>
 
-                    <!-- First name -->
-                    <div class="row mb-3">
-                        <!-- label -->
-                        <div class="col-3">
-                            <label class="col-form-label" for="firstName">
-                                First name <small class="text-danger">*</small>
-                            </label>
-                        </div>
-                        <!-- textbox -->
-                        <div class="col-9">
-                            <input class="form-control" type="text" formControlName="firstName" placeholder="First name"
-                                id="firstName">
-                            <!-- error messages -->
-                            <div class="text-danger" *ngFor="let e of errorMessages.firstName">
-                                <!-- errors on the "firstName" field -->
-                                <div *ngIf="checkoutForm.get('firstName')?.hasError(e.type) && 
-                                    (checkoutForm.get('firstName')?.dirty || checkoutForm.get('firstName')?.touched)">
-                                    <small>{{e.message}}</small>
+                        <!-- Email -->
+                        <div class="row mb-3">
+                            <!-- label -->
+                            <div class="col-3">
+                                <label class="col-form-label" for="email">
+                                    Email<small class="text-danger">*</small>
+                                </label>
+                            </div>
+                            <!-- textbox -->
+                            <div class="col-9">
+                                <input class="form-control" type="email" formControlName="email"
+                                    placeholder="Ex: abc@gmail.com" id="email">
+                                <!-- error messages -->
+                                <div class="text-danger" *ngFor="let e of errorMessages.email">
+                                    <!-- userForm.get('email')?.dirty: field 'email' was changed? -->
+                                    <!-- userForm.get('email')?.touched: field 'email' lost focus? -->
+                                    <div *ngIf="email?.hasError(e.type) && 
+                                    (email?.dirty || email?.touched)">
+
+                                        <small>{{e.message}}</small>
+                                    </div>
+
                                 </div>
-                                
+                            </div>
+                        </div>
+
+                        <!-- First name -->
+                        <div class="row mb-3">
+                            <!-- label -->
+                            <div class="col-3">
+                                <label class="col-form-label" for="firstName">
+                                    First name <small class="text-danger">*</small>
+                                </label>
+                            </div>
+                            <!-- textbox -->
+                            <div class="col-9">
+                                <input class="form-control" type="text" formControlName="firstName"
+                                    placeholder="First name" id="firstName">
+                                <!-- error messages -->
+                                <div class="text-danger" *ngFor="let e of errorMessages.firstName">
+                                    <!-- errors on the "firstName" field -->
+                                    <div *ngIf="firstName?.hasError(e.type) && 
+                                    (firstName?.dirty || firstName?.touched)">
+                                        <small>{{e.message}}</small>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- LastName -->
+                        <div class="row mb-3">
+                            <!-- label -->
+                            <div class="col-3">
+                                <label class="col-form-label" for="lastName">
+                                    Last name<small class="text-danger">*</small>
+                                </label>
+                            </div>
+                            <!-- textbox -->
+                            <div class="col-9">
+                                <input class="form-control" type="text" formControlName="lastName"
+                                    placeholder="Last name" id="lastName">
+                                <!-- error messages -->
+                                <div class="text-danger" *ngFor="let e of errorMessages.lastName">
+                                    <!-- errors on the "lastName" field -->
+                                    <div *ngIf="lastName?.hasError(e.type) && 
+                                    (lastName?.dirty || lastName?.touched)">
+                                        <small>{{e.message}}</small>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="row mb-3">
+                            <!-- label -->
+                            <div class="col-3">
+                                <label class="col-form-label" for="phone">
+                                    Phone<small class="text-danger">*</small>
+                                </label>
+                            </div>
+                            <!-- textbox -->
+                            <div class="col-9">
+                                <input class="form-control" type="text" formControlName="phone"
+                                    placeholder="Phone number(10 digits)" id="phone">
+                                <!-- error messages -->
+                                <div class="text-danger" *ngFor="let e of errorMessages.phone">
+                                    <!-- errors on the "phone" field -->
+                                    <div *ngIf="phone?.hasError(e.type) && 
+                                    (phone?.dirty || phone?.touched)">
+                                        <small>{{e.message}}</small>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Shipping address -->
+                        <div class="row mb-3">
+                            <!-- label -->
+                            <div class="col-3">
+                                <label class="col-form-label" for="shippingAddress">
+                                    Shipping address<small class="text-danger">*</small>
+                                </label>
+                            </div>
+                            <!-- textbox -->
+                            <div class="col-9">
+                                <input class="form-control" type="text" formControlName="shippingAddress"
+                                    placeholder="Shipping address" id="shippingAddress">
+                                <!-- error messages -->
+                                <div class="text-danger" *ngFor="let e of errorMessages.shippingAddress">
+                                    <!-- errors on the "shippingAddress" field -->
+                                    <div *ngIf="shippingAddress?.hasError(e.type) && 
+                                    (shippingAddress?.dirty || shippingAddress?.touched)">
+                                        <small>{{e.message}}</small>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- LastName -->
-                    <div class="row mb-3">
-                        <!-- label -->
-                        <div class="col-3">
-                            <label class="col-form-label" for="lastName">
-                                Last name<small class="text-danger">*</small>
-                            </label>
-                        </div>
-                        <!-- textbox -->
-                        <div class="col-9">
-                            <input class="form-control" type="text" formControlName="lastName" placeholder="Last name"
-                                id="lastName">
-                            <!-- error messages -->
-                            <div class="text-danger" *ngFor="let e of errorMessages.lastName">
-                                <!-- errors on the "lastName" field -->
-                                <div *ngIf="checkoutForm.get('lastName')?.hasError(e.type) && 
-                                    (checkoutForm.get('lastName')?.dirty || checkoutForm.get('lastName')?.touched)">
-                                    <small>{{e.message}}</small>
-                                </div>
+                </div>
+            </div>
+
+            <!-- the "Right" column -->
+            <div class="col-md-5">
+                <div class="container-fluid">
+
+                    <div class="form-area">
+                        <h4>Order summary</h4>
+
+                        <!-- Total quantity -->
+                        <div class="row mb-3">
+                            <!-- label -->
+                            <div class="col-12">
+                                <label class="col-form-label" for="totalQuantity">
+                                    Total quantity: {{totalQuantity}}
+                                </label>
                             </div>
-
                         </div>
-                    </div>
-
-                    <!-- Phone -->
-                    <div class="row mb-3">
-                        <!-- label -->
-                        <div class="col-3">
-                            <label class="col-form-label" for="phone">
-                                Phone<small class="text-danger">*</small>
-                            </label>
-                        </div>
-                        <!-- textbox -->
-                        <div class="col-9">
-                            <input class="form-control" type="text" formControlName="phone" placeholder="Phone"
-                                id="phone" tooltip="Phone number(10 digits)">
-                            <!-- error messages -->
-                            <div class="text-danger" *ngFor="let e of errorMessages.phone">
-                                <!-- errors on the "phone" field -->
-                                <div *ngIf="checkoutForm.get('phone')?.hasError(e.type) && 
-                                    (checkoutForm.get('phone')?.dirty || 
-                                    checkoutForm.get('phone')?.touched)">
-                                    <small>{{e.message}}</small>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!-- Shipping address -->
-                    <div class="row mb-3">
-                        <!-- label -->
-                        <div class="col-3">
-                            <label class="col-form-label" for="shippingAddress">
-                                Shipping address<small class="text-danger">*</small>
-                            </label>
-                        </div>
-                        <!-- textbox -->
-                        <div class="col-9">
-                            <input class="form-control" type="text" formControlName="shippingAddress"
-                                placeholder="Shipping address" id="shippingAddress">
-                            <!-- error messages -->
-                            <div class="text-danger" *ngFor="let e of errorMessages.shippingAddress">
-                                <!-- errors on the "shippingAddress" field -->
-                                <div *ngIf="checkoutForm.get('shippingAddress')?.hasError(e.type) && 
-                                    (checkoutForm.get('shippingAddress')?.dirty || 
-                                    checkoutForm.get('shippingAddress')?.touched)">
-                                    <small>{{e.message}}</small>
-                                </div>
+                        <!-- Total price -->
+                        <div class="row mb-3">
+                            <!-- label -->
+                            <div class="col-12">
+                                <label class="col-form-label" for="totalPrice">
+                                    Total price: {{totalPrice | currency: "VND"}}
+                                </label>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -152,5 +198,8 @@
                 <button class="btn btn-dark" routerLink="/product-list" style="width: 150px">Cancel</button>
             </div>
         </div>
+
+
+
     </form>
 </div>
