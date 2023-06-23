@@ -9,12 +9,14 @@ import { Purchase } from '../payload/purchase';
 })
 export class CheckoutService {
 
-  private purchaseUrl = environment.apiUrl + '/checkout/purchase';
+  private purchaseUrl = environment.apiUrl + '/purchase';
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(
+    private httpClient: HttpClient
+  ) { }
 
   placeOrder(purchase: Purchase): Observable<any> {
-    return this.httpClient.post<Purchase>(this.purchaseUrl, purchase);    
+    return this.httpClient.post<Purchase>(this.purchaseUrl, purchase);
   }
-  
+
 }

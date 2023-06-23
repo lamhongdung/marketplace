@@ -2,17 +2,17 @@ import { CartItem } from "./cart-item";
 
 export class OrderItem {
 
-    imageUrl: string | undefined;
-    unitPrice: number | undefined;
-    quantity: number | undefined;
-    productId: string | undefined;
+    imageUrl: string;
+    unitPrice: number;
+    quantity: number;
+    productId: string;
 
     constructor(cartItem: CartItem) {
 
-        this.imageUrl = cartItem.imageUrl;
+        this.imageUrl = cartItem.imageUrl!;
         this.quantity = cartItem.quantity;
-        this.unitPrice = cartItem.unitPrice;
-        this.productId = cartItem.id;
+        this.unitPrice = cartItem.unitPrice!;
+        this.productId = cartItem.id!;
 
     }
 

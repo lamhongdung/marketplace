@@ -21,6 +21,7 @@ export class AuthInterceptor implements HttpInterceptor {
       (httpRequest.url.includes(`${this.authService.host}/signup`)) ||
       (httpRequest.url.includes(`${this.authService.host}/product-list`)) ||
       (httpRequest.url.includes(`${this.authService.host}/product-total-elements`)) ||
+      (httpRequest.url.includes(`${this.authService.host}/purchase`)) ||
       (httpRequest.url.includes(`${this.authService.host}/product-search`))
     ) {
 

@@ -138,28 +138,34 @@ export class CheckoutComponent implements OnInit {
   purchase() {
     console.log("Handling the submit button");
 
-    if (this.checkoutForm.invalid) {
-      this.checkoutForm.markAllAsTouched();
-      return;
-    }
+    // if (this.checkoutForm.invalid) {
+    //   this.checkoutForm.markAllAsTouched();
+    //   return;
+    // }
 
     // set up order
     let order = new Order();
+    order.userId = 0;
+    order.email = this.email?.value;
+    order.firstName = this.firstName?.value
+    order.lastName = this.lastName?.value;
+    order.phone = this.phone?.value;
+    order.shippingAddress = this.shippingAddress?.value;
     order.totalPrice = this.totalPrice;
     order.totalQuantity = this.totalQuantity;
 
     // get cart items
     const cartItems = this.cartService.cartItems;
 
+    //
+    // convert cartItems to OrderItem[].
+    //
     // create orderItems from cartItems
-    // - long way
     // let orderItems: OrderItem[] = [];
     // for (let i=0; i < cartItems.length; i++) {
     //   orderItems[i] = new OrderItem(cartItems[i]);
     // }
-
-    // - short way of doing the same thing
-    // convert cartItems to OrderItem[]
+    // <==>
     let orderItems: OrderItem[] = cartItems.map(tempCartItem => new OrderItem(tempCartItem));
 
     // set up purchase
@@ -173,25 +179,27 @@ export class CheckoutComponent implements OnInit {
     purchase.orderItems = orderItems;
 
     // call REST API via the CheckoutService
-    this.checkoutService.placeOrder(purchase).subscribe({
-      // "next" means success
-      next: response => {
-        alert(`Your order has been received.\nOrder tracking number: ${response.orderTrackingNumber}`);
+    this.checkoutService.placeOrder(purchase)
+      .subscribe({
 
-        // reset cart
-        this.resetCart();
+        // save the order successful
+        next: response => {
+          alert(`Your order has been received.\nOrder tracking number: ${response.orderTrackingNumber}`);
 
-      },
-      //  "error" means error/exception
-      error: err => {
-        alert(`There was an error: ${err.message}`);
-      }
-    }
-    );
+          // reset cart
+          this.resetCart();
 
+        },
+
+        //  there are some errors when save the order
+        error: err => {
+          alert(`There was an error: ${err.message}`);
+        }
+      });
   }
 
   resetCart() {
+
     // reset cart data
     this.cartService.cartItems = [];
     this.cartService.totalPrice.next(0);
@@ -200,7 +208,8 @@ export class CheckoutComponent implements OnInit {
     // reset the form
     this.checkoutForm!.reset();
 
-    // navigate back to the product page
-    this.router.navigateByUrl("/products");
-  }
+    // navigate back to the product-list page
+    this.router.navigateByUrl("/product-list");
+
+  } // end of resetCart()
 }
