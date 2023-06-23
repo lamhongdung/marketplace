@@ -11,6 +11,8 @@ use marketplace;
 -- table `product`
 -- -----------------------------------------------------
 
+set foreign_key_checks = 0;
+
 drop table if exists `product`;
 
 create table `product` (
@@ -51,11 +53,13 @@ insert into product (id, name, description, unitPrice, imageUrl, active, unitInS
 insert into product (id, name, description, unitPrice, imageUrl, active, unitInStock,  dateCreated, lastUpdated) VALUES (1020,'Tai nghe EP Gaming Asus Rog Cetra II Core Đen','Củ tai có lớp vỏ nhôm nhẹ, cho khả năng chịu lực tốt, chống trầy xước. Kiểu dáng củ tai hơi nghiêng về phía trước cùng đệm tai và móc tai chất liệu LSR (cao su silicone lỏng) kết cấu cực mềm tạo nên sự dễ chịu và phù hợp tối ưu cho trải nghiệm nghe tốt nhất trong khi chơi game',1161000,'assets/image/product/1020.jpg',1,100,now(),now());
 insert into product (id, name, description, unitPrice, imageUrl, active, unitInStock,  dateCreated, lastUpdated) VALUES (1021,'Tai nghe Bluetooth True Wireless Beats Studio Buds MJ503 Đỏ','Phiên bản Beats Studio Buds MJ503 màu đỏ cực bắt mắt với hộp sạc kiểu dáng mềm mại, mới lạ, rất trẻ trung cho người trẻ năng động. Vỏ ngoài hộp sạc và tai nghe dùng chất liệu nhựa nhám sang trọng, chống trầy, tiện lợi cho bạn mang theo đến mọi nơi nhờ kích thước gọn nhẹ',3790000,'assets/image/product/1021.jpg',1,100,now(),now());
 
+set foreign_key_checks = 1;
+
 -- -----------------------------------------------------
 -- Table `user`
 -- -----------------------------------------------------
 
--- set foreign_key_checks = 0;
+set foreign_key_checks = 0;
 
 drop table if exists `user`;
 
@@ -83,42 +87,65 @@ insert into `user`(id, email, password, firstName, lastName, phone, shippingAddr
 (1,'dunglh+customer1@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Quân','Châu', '0986009999','123 Trần Hưng Đạo','ROLE_CUSTOMER','Active');
 
 
--- set foreign_key_checks = 1;
+set foreign_key_checks = 1;
 
 -- -----------------------------------
 -- Table `orders`
 -- -----------------------------------
--- drop table if exists `orders`;
 
--- CREATE TABLE `orders` (
---   `id` bigint NOT NULL AUTO_INCREMENT,
---   `orderTrackingNumber` varchar(255) DEFAULT NULL,
---   `totalPrice` decimal(19,2) DEFAULT NULL,
---   `totalQuantity` int DEFAULT NULL,
---   `customerId` bigint DEFAULT NULL,
---   `status` varchar(128) DEFAULT NULL,
---   `dateCreated` datetime(6) DEFAULT NULL,
---   `lastUpdated` datetime(6) DEFAULT NULL,
---   PRIMARY KEY (`id`),
---   KEY `FK_customerId` (`customerId`),
---   CONSTRAINT `FK_customerId` FOREIGN KEY (`customerId`) REFERENCES `customer` (`id`)
--- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+set foreign_key_checks = 0;
+
+drop table if exists `orders`;
+
+create table `orders` (
+
+	`id` int not null auto_increment,
+	`orderTrackingNumber` varchar(255) default null,
+	`totalQuantity` int default null,
+	`totalPrice` decimal(19,2) default null,
+	`userId` int default null,
+	--
+	`email` varchar(255) not null,
+	`firstName` varchar(255) not null,
+	`lastName` varchar(255) not null,
+	`phone` varchar(255) not null,
+	`shippingAddress` varchar(255) not null,
+    --
+	`status` varchar(255) default null,
+	`dateCreated` datetime(6) default null,
+	`lastUpdated` datetime(6) default null,
+  
+	primary key(`id`),
+	key `fk_userId` (`userId`),
+	constraint `fk_userId` foreign key (`userId`) references `user` (`id`)
+  
+) engine=InnoDB auto_increment=2001 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
+
+set foreign_key_checks = 1;
 
 -- -----------------------------------
 -- Table `orderItem`
 -- -----------------------------------
 
--- drop table if exists `orderItem`;
+set foreign_key_checks = 0;
 
--- CREATE TABLE `orderItem` (
---   `id` bigint NOT NULL AUTO_INCREMENT,
---   `imageUrl` varchar(255) DEFAULT NULL,
---   `quantity` int DEFAULT NULL,
---   `unitPrice` decimal(19,2) DEFAULT NULL,
---   `orderId` bigint DEFAULT NULL,
---   `productId` bigint DEFAULT NULL,
---   PRIMARY KEY (`id`),
---   KEY `FK_orderId` (`orderId`),
---   CONSTRAINT `FK_orderId` FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`),
---   CONSTRAINT `FK_productId` FOREIGN KEY (`productId`) REFERENCES `product` (`id`)
--- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+drop table if exists `orderItem`;
+
+create table `orderItem` (
+
+  `id` int not null auto_increment,
+  `orderId` int default null,
+  `productId` int default null,
+  `imageUrl` varchar(255) default null,
+  `quantity` int default null,
+  `unitPrice` decimal(19,2) default null,
+
+  primary key (`id`),
+  
+  key `fk_orderId` (`orderId`),
+  constraint `fk_orderId` foreign key (`orderId`) references `orders` (`id`),
+  constraint `fk_productId` foreign key (`productId`) references `product` (`id`)
+  
+) engine=InnoDB auto_increment=2001 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
+
+set foreign_key_checks = 1;

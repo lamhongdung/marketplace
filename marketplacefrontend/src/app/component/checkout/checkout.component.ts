@@ -36,10 +36,12 @@ export class CheckoutComponent implements OnInit {
     ],
     firstName: [
       { type: 'required', message: 'Please input the first name' },
+      { type: 'allWhitespace', message: 'First name does not allow all white spaces' },
       { type: 'maxlength', message: 'First name cannot be longer than 50 characters' },
     ],
     lastName: [
       { type: 'required', message: 'Please input the last name' },
+      { type: 'allWhitespace', message: 'Last name does not allow all white spaces' },
       { type: 'maxlength', message: 'Last name cannot be longer than 50 characters' },
     ],
     phone: [
@@ -48,6 +50,7 @@ export class CheckoutComponent implements OnInit {
     ],
     shippingAddress: [
       { type: 'required', message: 'Please input shipping address' },
+      { type: 'allWhitespace', message: 'Shipping address does not allow all white spaces' },
       { type: 'maxlength', message: 'Shipping address cannot be longer than 100 characters' }
     ]
   };
@@ -56,21 +59,20 @@ export class CheckoutComponent implements OnInit {
     private formBuilder: FormBuilder,
     private cartService: CartService,
     private checkoutService: CheckoutService,
-    private router: Router) {
+    private router: Router
+  ) {
 
   }
 
   ngOnInit(): void {
 
-
+    this.cartSummary();
 
     // read the user's email address from browser storage
     // const theEmail = JSON.parse(this.storage.getItem('userEmail')!);
 
     // initial form
     this.initForm();
-
-    this.reviewCartDetails();
 
   }
 
@@ -87,11 +89,13 @@ export class CheckoutComponent implements OnInit {
       // required and max length = 50 characters
       firstName: ['',
         [Validators.required,
+        CustomValidator.allWhitespace,
         Validators.maxLength(50)]],
 
       // required and max length = 50 characters
       lastName: ['',
         [Validators.required,
+        CustomValidator.allWhitespace,
         Validators.maxLength(50)]],
 
       // required and length must be 10 digits
@@ -102,25 +106,27 @@ export class CheckoutComponent implements OnInit {
       // required and max length = 100 characters
       shippingAddress: ['',
         [Validators.required,
+        CustomValidator.allWhitespace,
         Validators.maxLength(100)]],
 
     });
 
   } // end of initForm()
 
-  reviewCartDetails() {
+  // cart summary
+  cartSummary() {
 
-    // subscribe to cartService.totalQuantity
+    // get latest value of totalQuantity from cartService
     this.cartService.totalQuantity.subscribe(
       totalQuantity => this.totalQuantity = totalQuantity
     );
 
-    // subscribe to cartService.totalPrice
+    // get latest value of totalPrice(cart amount) from cartService
     this.cartService.totalPrice.subscribe(
       totalPrice => this.totalPrice = totalPrice
     );
 
-  }
+  } // end of cartSummary()
 
   // define getters
   get email() { return this.checkoutForm.get('email'); }

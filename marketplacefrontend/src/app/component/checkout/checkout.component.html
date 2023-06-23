@@ -150,7 +150,7 @@
                 <div class="container-fluid">
 
                     <div class="form-area">
-                        <h4>Order summary</h4>
+                        <h4>Cart summary</h4>
 
                         <!-- Total quantity -->
                         <div class="row mb-3">
@@ -166,7 +166,7 @@
                             <!-- label -->
                             <div class="col-12">
                                 <label class="col-form-label" for="totalPrice">
-                                    Total price: {{totalPrice | currency: "VND"}}
+                                    Total price: <span class="text-danger">{{totalPrice | currency: "VND"}}</span>
                                 </label>
                             </div>
                         </div>
