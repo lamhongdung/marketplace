@@ -23,6 +23,7 @@ public class Constant {
             "/login",
             // products
             "/product-list", "/product-list/**", "/product-search", "/product-total-elements",
+            "/purchase",
 //            "**",
             "/signup", "/user-create"};
 

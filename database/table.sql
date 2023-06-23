@@ -111,13 +111,10 @@ create table `orders` (
 	`phone` varchar(255) not null,
 	`shippingAddress` varchar(255) not null,
     --
-	`status` varchar(255) default null,
 	`dateCreated` datetime(6) default null,
 	`lastUpdated` datetime(6) default null,
   
-	primary key(`id`),
-	key `fk_userId` (`userId`),
-	constraint `fk_userId` foreign key (`userId`) references `user` (`id`)
+	primary key(`id`)
   
 ) engine=InnoDB auto_increment=2001 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
 

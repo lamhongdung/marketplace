@@ -29,6 +29,7 @@ public class Order {
     @Column(name = "id")
     private Long id;
 
+    // unique id and hard to guess
     @Column(name = "orderTrackingNumber")
     private String orderTrackingNumber;
 
@@ -38,9 +39,12 @@ public class Order {
     @Column(name = "totalPrice")
     private BigDecimal totalPrice;
 
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    private User user;
+    @Column(name = "userId")
+    private int userId;
+
+//    @ManyToOne
+//    @JoinColumn(name = "userId")
+//    private User user;
 
     //
     //
@@ -72,9 +76,6 @@ public class Order {
     //
     //
 
-    @Column(name = "status")
-    private String status;
-
     @Column(name = "dateCreated")
     @CreationTimestamp
     private Date dateCreated;
@@ -83,9 +84,13 @@ public class Order {
     @UpdateTimestamp
     private Date lastUpdated;
 
+    // one order has many orderItems.
+    // mappedBy = "order": 'order' is an object in table 'OrderItem'.
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
     private Set<OrderItem> orderItems = new HashSet<>();
 
+    // add item to orderItems
+    // and set field 'orderId' in table 'orderItem' equals to id of this 'order' object
     public void add(OrderItem item) {
 
         if (item != null) {

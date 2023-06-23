@@ -3,12 +3,11 @@ package com.ez.marketplacebackend.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -53,5 +52,20 @@ public class User implements Serializable {
     // Active or Inactive
     @Pattern(regexp = "Active|Inactive", message = "Value of status must be 'Active' or 'Inactive'")
     private String status;
+
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private Set<Order> orders = new HashSet<>();
+//
+//    public void add(Order order) {
+//        if (order != null) {
+//
+//            if (orders == null) {
+//                orders = new HashSet<>();
+//            }
+//
+//            orders.add(order);
+//            order.setUser(this);
+//        }
+//    }
 
 }
