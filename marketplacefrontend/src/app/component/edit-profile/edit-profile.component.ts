@@ -24,7 +24,7 @@ export class EditProfileComponent implements OnInit {
   showSpinner: boolean = false;
 
   // editProfileForm has 5 fields:
-  //  - id: does not show it to user
+  //  - id(read only)
   //  - Email(read only)
   //  - First name
   //  - Last name
@@ -41,7 +41,9 @@ export class EditProfileComponent implements OnInit {
   // email of the logged in user
   loggedInEmail: string = "";
 
-  // user id of the logged in user
+  // user id of the logged in user.
+  // =0: user has not yet logged in the system.
+  // >0: user already logged in the system
   userId: number = 0;
 
   // user role
@@ -122,6 +124,7 @@ export class EditProfileComponent implements OnInit {
   // initial form
   initForm() {
 
+    // 'edit profile' form
     this.editProfileForm = this.formBuilder.group(
       {
         id: [''],
@@ -181,11 +184,13 @@ export class EditProfileComponent implements OnInit {
 
   // send notification to user
   private sendNotification(notificationType: NotificationType, message: string): void {
+
     if (message) {
       this.notifierService.notify(notificationType, message);
     } else {
       this.notifierService.notify(notificationType, 'An error occurred. Please try again.');
     }
+
   } // end of sendNotification()
 
 } // end of the EditProfileComponent class

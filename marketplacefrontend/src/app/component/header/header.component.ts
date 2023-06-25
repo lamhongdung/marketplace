@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { AuthService } from 'src/app/service/auth.service';
-import { ShareService } from 'src/app/service/share.service';
 
 @Component({
   selector: 'app-header',
@@ -12,12 +11,16 @@ import { ShareService } from 'src/app/service/share.service';
 })
 export class HeaderComponent implements OnInit {
 
-  // user id(customer id)
+  // user id(customer id).
+  // - userid = 0: customer has not yet logged in the system.
+  // - userid > 0: customer already logged in the system.
   userid: number = 0;
 
   // user email who has just logged in
   loggedInEmail: string = "";
 
+  // if user has not yet logged in the system: profileName = 'Guest'.
+  // if user already logged in the system: profileName = userid + email.
   profileName: string = "";
 
   constructor(
@@ -33,6 +36,7 @@ export class HeaderComponent implements OnInit {
 
     // get userid from local storage
     this.userid = +this.authService.getIdFromLocalStorage();
+
     // publish userid to all subscribers
     this.authService.userid.next(this.userid);
     // refresh value of userid
@@ -57,6 +61,7 @@ export class HeaderComponent implements OnInit {
       )
 
     console.log("userid:" + this.userid);
+
   } // end of ngOnInit()
 
   // user clicks on the "logout" menu
@@ -77,21 +82,23 @@ export class HeaderComponent implements OnInit {
         data => this.profileName = data
       )
 
-    // this.router.navigate(['/login']);
+    // navigate to '/product-list'
     this.router.navigate(['/product-list']);
 
-    // show "Logout message"
+    // show "Logout message" to user
     this.sendNotification(NotificationType.SUCCESS, "You have just logged out!");
 
-  }
+  } // end of logOut()
 
   // send notification to user
   sendNotification(notificationType: NotificationType, message: string): void {
+
     if (message) {
       this.notifierService.notify(notificationType, message);
     } else {
       this.notifierService.notify(notificationType, 'An error occurred. Please try again.');
     }
+
   } // end of sendNotification()
 
-}
+} // end of class HeaderComponent
