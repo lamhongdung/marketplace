@@ -2,7 +2,6 @@ package com.ez.marketplacebackend.payload;
 
 import com.ez.marketplacebackend.entity.Order;
 import com.ez.marketplacebackend.entity.OrderItem;
-import com.ez.marketplacebackend.entity.User;
 import lombok.*;
 
 import java.util.Set;
@@ -14,10 +13,10 @@ import java.util.Set;
 @Setter
 public class Purchase {
 
-//    private User user;
-
+    // order header
     private Order order;
 
+    // order details
     private Set<OrderItem> orderItems;
 
 }

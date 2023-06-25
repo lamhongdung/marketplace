@@ -9,9 +9,6 @@ public class Constant {
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String JWT_TOKEN_HEADER = "Jwt-Token";
     public static final String TOKEN_CANNOT_BE_VERIFIED = "Token cannot be verified";
-
-    public static final String MARKET_PLACE = "Market Place";
-    public static final String MARKET_PLACE_ADMINISTRATION = "Market Place System";
     public static final String AUTHORITIES = "authorities";
     public static final String FORBIDDEN_MESSAGE = "You need to log in to access this page";
     public static final String ACCESS_DENIED_MESSAGE = "You do not have permission to access this page";
@@ -21,10 +18,8 @@ public class Constant {
     //    public static final String[] PUBLIC_URLS = { "**" };
     public static final String[] PUBLIC_URLS = {
             "/login",
-            // products
             "/product-list", "/product-list/**", "/product-search", "/product-total-elements",
             "/purchase",
-//            "**",
             "/signup", "/user-create"};
 
     //

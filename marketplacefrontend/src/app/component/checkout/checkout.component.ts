@@ -1,12 +1,17 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
+import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { Order } from 'src/app/payload/order';
 import { OrderItem } from 'src/app/payload/order-item';
 import { Purchase } from 'src/app/payload/purchase';
+import { User } from 'src/app/payload/user';
+import { AuthService } from 'src/app/service/auth.service';
 import { CartService } from 'src/app/service/cart.service';
 import { CheckoutService } from 'src/app/service/checkout.service';
+import { UserService } from 'src/app/service/user.service';
 import { CustomValidator } from 'src/app/validator/CustomValidator';
 
 @Component({
@@ -21,10 +26,17 @@ export class CheckoutComponent implements OnInit {
   // =false: does not allow to display spinner in the "Purchase" button
   showSpinner: boolean = false;
 
-  checkoutForm!: FormGroup;
+  // customer information form
+  customerForm!: FormGroup;
 
-  totalPrice: number = 0;
+  // cart quantity
   totalQuantity: number = 0;
+
+  // cart amount
+  totalPrice: number = 0;
+
+  // user id of the logged in user
+  userId: number = 0;
 
   storage: Storage = sessionStorage;
 
@@ -59,27 +71,61 @@ export class CheckoutComponent implements OnInit {
     private formBuilder: FormBuilder,
     private cartService: CartService,
     private checkoutService: CheckoutService,
+    private notifierService: NotifierService,
+    private authService: AuthService,
+    private userService: UserService,
     private router: Router
   ) {
 
   }
 
+  // post construction
   ngOnInit(): void {
 
-    this.cartSummary();
-
-    // read the user's email address from browser storage
-    // const theEmail = JSON.parse(this.storage.getItem('userEmail')!);
+    // get user id of the logged-in user.
+    // the "+" sign: use to convert string to number
+    this.userId = +this.authService.getIdFromLocalStorage();
+    console.log(`userid: ${this.userId}`);
 
     // initial form
     this.initForm();
+
+    // if user logged in then loading user information into customerForm
+    if (this.userId > 0) {
+
+      // get user by user id for load existing user to form
+      this.userService.findById(this.userId)
+        .subscribe({
+
+          // get user successful
+          next: (data: User) => {
+
+            // load user information to customerForm
+            this.customerForm.controls['email'].setValue(data.email);
+            this.customerForm.controls['firstName'].setValue(data.firstName);
+            this.customerForm.controls['lastName'].setValue(data.lastName);
+            this.customerForm.controls['phone'].setValue(data.phone);
+            this.customerForm.controls['shippingAddress'].setValue(data.shippingAddress);
+
+          },
+
+          // there are some errors when get user from database 
+          error: (errorResponse: HttpErrorResponse) => {
+            // show error message to user
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+          }
+        });
+    }
+
+    // cart quantity and cart amount
+    this.cartSummary();
 
   }
 
   // initial form
   initForm() {
 
-    this.checkoutForm = this.formBuilder.group({
+    this.customerForm = this.formBuilder.group({
 
       // required and must be in correct format 
       email: ['',
@@ -113,10 +159,17 @@ export class CheckoutComponent implements OnInit {
 
   } // end of initForm()
 
+  // define getters
+  get email() { return this.customerForm.get('email'); }
+  get firstName() { return this.customerForm.get('firstName'); }
+  get lastName() { return this.customerForm.get('lastName'); }
+  get phone() { return this.customerForm.get('phone'); }
+  get shippingAddress() { return this.customerForm.get('shippingAddress'); }
+
   // cart summary
   cartSummary() {
 
-    // get latest value of totalQuantity from cartService
+    // get latest value of totalQuantity(cart quantity) from cartService
     this.cartService.totalQuantity.subscribe(
       totalQuantity => this.totalQuantity = totalQuantity
     );
@@ -128,24 +181,12 @@ export class CheckoutComponent implements OnInit {
 
   } // end of cartSummary()
 
-  // define getters
-  get email() { return this.checkoutForm.get('email'); }
-  get firstName() { return this.checkoutForm.get('firstName'); }
-  get lastName() { return this.checkoutForm.get('lastName'); }
-  get phone() { return this.checkoutForm.get('phone'); }
-  get shippingAddress() { return this.checkoutForm.get('shippingAddress'); }
-
+  // when user presses the 'Purchase' button
   purchase() {
-    console.log("Handling the submit button");
 
-    // if (this.checkoutForm.invalid) {
-    //   this.checkoutForm.markAllAsTouched();
-    //   return;
-    // }
-
-    // set up order
+    // set up order(cart header)
     let order = new Order();
-    order.userId = 0;
+    order.userId = this.userId;
     order.email = this.email?.value;
     order.firstName = this.firstName?.value
     order.lastName = this.lastName?.value;
@@ -171,20 +212,21 @@ export class CheckoutComponent implements OnInit {
     // set up purchase
     let purchase = new Purchase();
 
-    // populate purchase - customer
-    // purchase.customer = this.checkoutFormGroup!.controls['customer'].value;
-
-    // populate purchase - order and orderItems
+    // populate purchase - order(order header) and orderItems(order details)
     purchase.order = order;
     purchase.orderItems = orderItems;
 
     // call REST API via the CheckoutService
-    this.checkoutService.placeOrder(purchase)
+    this.checkoutService.purchase(purchase)
       .subscribe({
 
-        // save the order successful
+        // save the order and orderItems successful
         next: response => {
-          alert(`Your order has been received.\nOrder tracking number: ${response.orderTrackingNumber}`);
+
+          // send notification to user
+          this.sendNotification(
+            NotificationType.SUCCESS,
+            `Your order has been received.\nOrder tracking number: ${response.orderTrackingNumber}`);
 
           // reset cart
           this.resetCart();
@@ -193,23 +235,38 @@ export class CheckoutComponent implements OnInit {
 
         //  there are some errors when save the order
         error: err => {
-          alert(`There was an error: ${err.message}`);
+
+          this.sendNotification(
+            NotificationType.ERROR, `There was an error: ${err.message}`);
+
         }
       });
   }
 
+  // reset cart
   resetCart() {
 
     // reset cart data
     this.cartService.cartItems = [];
     this.cartService.totalPrice.next(0);
     this.cartService.totalQuantity.next(0);
+    this.cartService.persistCartItems();
 
     // reset the form
-    this.checkoutForm!.reset();
+    this.customerForm!.reset();
 
     // navigate back to the product-list page
     this.router.navigateByUrl("/product-list");
 
   } // end of resetCart()
-}
+
+  // send notification to user
+  private sendNotification(notificationType: NotificationType, message: string): void {
+    if (message) {
+      this.notifierService.notify(notificationType, message);
+    } else {
+      this.notifierService.notify(notificationType, 'An error occurred. Please try again.');
+    }
+  } // end of sendNotification()
+
+} // end of class CheckoutComponent

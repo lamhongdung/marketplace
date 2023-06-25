@@ -9,7 +9,6 @@ import { ProductService } from './service/product.service';
 import { HeaderComponent } from './component/header/header.component';
 import { FooterComponent } from './component/footer/footer.component';
 import { CartDetailComponent } from './component/cart-detail/cart-detail.component';
-import { CartStatusComponent } from './component/cart-status/cart-status.component';
 import { CheckoutComponent } from './component/checkout/checkout.component';
 import { ProductDetailComponent } from './component/product-detail/product-detail.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -20,6 +19,7 @@ import { NotificationModule } from './notification.module';
 import { LoginComponent } from './component/login/login.component';
 import { EditProfileComponent } from './component/edit-profile/edit-profile.component';
 import { AuthInterceptor } from './interceptor/auth.interceptor';
+import { CartSummaryComponent } from './component/cart-summary/cart-summary.component';
 
 
 @NgModule({
@@ -29,12 +29,12 @@ import { AuthInterceptor } from './interceptor/auth.interceptor';
     HeaderComponent,
     FooterComponent,
     CartDetailComponent,
-    CartStatusComponent,
     CheckoutComponent,
     ProductDetailComponent,
     UserCreateComponent,
     LoginComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    CartSummaryComponent
   ],
   imports: [
     BrowserModule,

@@ -37,10 +37,12 @@ public class JWTTokenProvider {
         String[] claims = getClaimsFromUser(userPrincipal);
 
         // generate token
-        return JWT.create().withIssuer(MARKET_PLACE).withAudience(MARKET_PLACE_ADMINISTRATION)
+        return JWT.create()
                 .withIssuedAt(new Date())
-                .withSubject(userPrincipal.getUsername()) // use email as userName
-                .withArrayClaim(AUTHORITIES, claims).withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                // use email as userName
+                .withSubject(userPrincipal.getUsername())
+                .withArrayClaim(AUTHORITIES, claims)
+                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(HMAC512(secret.getBytes()));
     }
 
@@ -50,9 +52,11 @@ public class JWTTokenProvider {
     }
 
     public Authentication getAuthentication(String username, List<GrantedAuthority> authorities, HttpServletRequest request) {
+
         UsernamePasswordAuthenticationToken userPasswordAuthToken = new
                 UsernamePasswordAuthenticationToken(username, null, authorities);
         userPasswordAuthToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
         return userPasswordAuthToken;
     }
 
@@ -81,8 +85,9 @@ public class JWTTokenProvider {
         JWTVerifier verifier;
         try {
             Algorithm algorithm = HMAC512(secret);
-            verifier = JWT.require(algorithm).withIssuer(MARKET_PLACE).build();
-        }catch (JWTVerificationException exception) {
+//            verifier = JWT.require(algorithm).withIssuer(MARKET_PLACE).build();
+            verifier = JWT.require(algorithm).build();
+        } catch (JWTVerificationException exception) {
             throw new JWTVerificationException(TOKEN_CANNOT_BE_VERIFIED);
         }
         return verifier;
@@ -90,7 +95,7 @@ public class JWTTokenProvider {
 
     private String[] getClaimsFromUser(UserPrincipal user) {
         List<String> authorities = new ArrayList<>();
-        for (GrantedAuthority grantedAuthority : user.getAuthorities()){
+        for (GrantedAuthority grantedAuthority : user.getAuthorities()) {
             authorities.add(grantedAuthority.getAuthority());
         }
         return authorities.toArray(new String[0]);

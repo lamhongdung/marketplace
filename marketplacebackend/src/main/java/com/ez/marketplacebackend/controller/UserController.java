@@ -26,8 +26,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
-import java.util.List;
-
 import static com.ez.marketplacebackend.constant.Constant.*;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -48,7 +46,8 @@ public class UserController extends ExceptionHandling {
     // customer logins to the MarketPlace system.
     // all users can access this end point "/login"
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody @Valid LoginUser loginUser, BindingResult bindingResult)
+    public ResponseEntity<User> login(@RequestBody @Valid LoginUser loginUser,
+                                      BindingResult bindingResult)
             throws BindException, BadDataException {
 
         LOGGER.info("validate data");
@@ -69,10 +68,11 @@ public class UserController extends ExceptionHandling {
             throw new BadDataException(USER_IS_INACTIVE);
         }
 
-        // if username or password is invalid then throw an exception
+        // if username or password is invalid then throw an exception.
+        // if there are no exception was thrown then authenticate successful.
         authenticate(loginUser.getEmail(), loginUser.getPassword());
 
-        // authenticate success(username and password are correct)
+        // get user by user email
         User user = userService.findUserByEmail(loginUser.getEmail());
 
         // get the generated JWT and send back to client
@@ -81,7 +81,8 @@ public class UserController extends ExceptionHandling {
 
         // return user(body), jwt token(header) and status
         return new ResponseEntity<>(user, jwtHeader, OK);
-    }
+
+    } // end of login()
 
     // create new customer(customer signs up account).
     // all users can access this end point "/user-create"
@@ -99,10 +100,12 @@ public class UserController extends ExceptionHandling {
             throw new BindException(bindingResult);
         }
 
+        // create new customer
         User newUser = userService.createUser(user);
 
         return new ResponseEntity<>(newUser, OK);
-    }
+
+    } // end of createUser()
 
     // find user by id.
     // this method is used for Edit Profile.
@@ -114,17 +117,20 @@ public class UserController extends ExceptionHandling {
 
         LOGGER.info("find user by id: " + id);
 
+        // get user by user id
         User user = userService.findById(id);
 
         return new ResponseEntity<>(user, OK);
-    }
+
+    } // end of findById()
 
     // update user profile.
     @PutMapping("/edit-profile")
     // only authenticated users can access this end point "/edit-profile"
     // (it means this function updateProfile())
     @PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
-    public ResponseEntity<User> updateProfile(@RequestBody @Valid EditProfile editProfile, BindingResult bindingResult)
+    public ResponseEntity<User> updateProfile(@RequestBody @Valid EditProfile editProfile,
+                                              BindingResult bindingResult)
             throws MessagingException, EntityNotFoundException, BindException {
 
         LOGGER.info("validate data");
@@ -137,10 +143,12 @@ public class UserController extends ExceptionHandling {
             throw new BindException(bindingResult);
         }
 
+        // update user profile
         User currentUser = userService.updateProfile(editProfile);
 
         return new ResponseEntity<>(currentUser, OK);
-    }
+
+    } // end of updateProfile()
 
     // create new instance HttpResponse
     private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String message) {
@@ -156,11 +164,14 @@ public class UserController extends ExceptionHandling {
         headers.add(JWT_TOKEN_HEADER, jwtTokenProvider.generateJwtToken(user));
 
         return headers;
-    }
+
+    } // end of getJwtHeader()
 
     // authenticate email and password sent from client is valid or not
     private void authenticate(String email, String password) {
+
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-    }
+
+    } // end of authenticate()
 
 }

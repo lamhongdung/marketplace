@@ -22,6 +22,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
+
     private JWTTokenProvider jwtTokenProvider;
 
     public JwtAuthorizationFilter(JWTTokenProvider jwtTokenProvider) {
@@ -36,7 +37,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         } else {
             // get header sent from client
             String authorizationHeader = request.getHeader(AUTHORIZATION);
-            // request is invalid
+
+            // request is invalid(header is NULL or header is not start with 'Bearer')
             if (authorizationHeader == null || !authorizationHeader.startsWith(TOKEN_PREFIX)) {
                 filterChain.doFilter(request, response);
                 return;
@@ -45,13 +47,16 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             // get token value without prefix 'Bearer'
             String token = authorizationHeader.substring(TOKEN_PREFIX.length());
 
-            // get username from token
+            // get username(email) from token
             String username = jwtTokenProvider.getSubject(token);
 
-            if (jwtTokenProvider.isTokenValid(username, token) && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (jwtTokenProvider.isTokenValid(username, token) &&
+                    SecurityContextHolder.getContext().getAuthentication() == null) {
+
                 List<GrantedAuthority> authorities = jwtTokenProvider.getAuthorities(token);
                 Authentication authentication = jwtTokenProvider.getAuthentication(username, authorities, request);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+
             } else {
                 SecurityContextHolder.clearContext();
             }

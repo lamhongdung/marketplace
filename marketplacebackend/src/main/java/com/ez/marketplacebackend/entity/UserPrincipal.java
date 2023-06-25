@@ -26,7 +26,8 @@ public class UserPrincipal implements UserDetails {
         authorities.add(new SimpleGrantedAuthority(this.user.getRole()));
 
         return authorities;
-    }
+
+    } // end of getAuthorities()
 
     @Override
     public String getPassword() {

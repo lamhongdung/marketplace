@@ -42,10 +42,11 @@ public class ProductController {
         List<Product> products = productService.searchProducts(pageNumber, pageSize, searchTerm);
 
         return new ResponseEntity<>(products, OK);
-    }
+
+    } // end of searchProducts()
 
     //
-    // get total products based on the search criteria.
+    // get total products(total elements) based on the search criteria.
     //
     // url: ex: /product-total-elements?searchTerm=
     //
@@ -57,7 +58,8 @@ public class ProductController {
         long totalElements = productService.getTotalElements(searchTerm);
 
         return new ResponseEntity<>(totalElements, HttpStatus.OK);
-    }
+
+    } // end of getTotalElements()
 
     // find product by id.
     // this method is used for View product detail.
@@ -67,9 +69,11 @@ public class ProductController {
 
         LOGGER.info("find product by id: " + id);
 
+        // get Product by product id
         Product product = productService.findById(id);
 
         return new ResponseEntity<>(product, OK);
-    }
+
+    } // end of findById()
 
 }

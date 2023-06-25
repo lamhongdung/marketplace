@@ -26,6 +26,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 // prePostEnabled = true: means enables @PreAuthorize, @PostAuthorize
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
     private JwtAuthorizationFilter jwtAuthorizationFilter;
     private JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -58,10 +59,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().cors().and()
-                // stateless: no use session, because we used JWT and in JWT has expired time
+                // stateless: no use session, because we will use JWT
                 .sessionManagement().sessionCreationPolicy(STATELESS)
                 // do not need to authenticate for PUBLIC_URLs
                 .and().authorizeRequests().antMatchers(PUBLIC_URLS).permitAll()
+                // other requests need login before using
                 .anyRequest().authenticated()
                 .and()
                 // return 401 - Unauthorized value

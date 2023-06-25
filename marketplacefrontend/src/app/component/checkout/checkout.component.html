@@ -7,8 +7,8 @@
 
 <div class="container-fluid">
 
-    <!-- call the function purchase() when user clicks the "purchase" button -->
-    <form [formGroup]="checkoutForm" (ngSubmit)="purchase()">
+    <!-- call the function purchase() when user clicks the "purchase" button in "Checkout" screen -->
+    <form [formGroup]="customerForm" (ngSubmit)="purchase()">
 
         <div class="row mt-5">
 
@@ -18,7 +18,7 @@
 
                     <!-- customer information -->
                     <div class="form-area">
-                        <h4>Customer</h4>
+                        <h4>Customer information</h4>
 
                         <!-- Email -->
                         <div class="row mb-3">
@@ -34,8 +34,8 @@
                                     placeholder="Ex: abc@gmail.com" id="email">
                                 <!-- error messages -->
                                 <div class="text-danger" *ngFor="let e of errorMessages.email">
-                                    <!-- userForm.get('email')?.dirty: field 'email' was changed? -->
-                                    <!-- userForm.get('email')?.touched: field 'email' lost focus? -->
+                                    <!-- email?.dirty: field 'email' was changed? -->
+                                    <!-- email?.touched: field 'email' lost focus? -->
                                     <div *ngIf="email?.hasError(e.type) && 
                                     (email?.dirty || email?.touched)">
 
@@ -152,7 +152,7 @@
                     <div class="form-area">
                         <h4>Cart summary</h4>
 
-                        <!-- Total quantity -->
+                        <!-- Total quantity(cart quantity) -->
                         <div class="row mb-3">
                             <!-- label -->
                             <div class="col-12">
@@ -161,7 +161,7 @@
                                 </label>
                             </div>
                         </div>
-                        <!-- Total price -->
+                        <!-- Total price(cart amount) -->
                         <div class="row mb-3">
                             <!-- label -->
                             <div class="col-12">
@@ -179,16 +179,16 @@
         <!-- buttons -->
         <div class="d-flex justify-content-center">
             <div>
-                <!-- the "Save" button -->
-                <!-- if the form values are invalid then disable the "Save" button -->
-                <button type="submit" [disabled]="checkoutForm.invalid" style="width: 150px"
+                <!-- the "Purchase" button -->
+                <!-- if the form values are invalid then disable the "Purchase" button -->
+                <button type="submit" [disabled]="customerForm.invalid" style="width: 150px"
                     class="btn btn-primary mr-2">
 
-                    <!-- display the spinner icon when press the "Save" button -->
+                    <!-- display the spinner icon when press the "Purchase" button -->
                     <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i>
-                    <!-- Change label button "Save" to "Saving.." -->
-                    <span *ngIf="showSpinner">Purchasing...</span>
-                    <!-- after save "new profile" then re-changes button name to "Save" -->
+                    <!-- Change label button "Purchase" to "Saving.." -->
+                    <span *ngIf="showSpinner">Saving...</span>
+                    <!-- after save "cart" then re-changes button name to "Purchase" -->
                     <span *ngIf="!showSpinner">Purchase</span>
 
                 </button>
@@ -198,8 +198,6 @@
                 <button class="btn btn-dark" routerLink="/product-list" style="width: 150px">Cancel</button>
             </div>
         </div>
-
-
 
     </form>
 </div>

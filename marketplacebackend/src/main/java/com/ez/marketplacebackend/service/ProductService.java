@@ -30,15 +30,17 @@ public class ProductService {
         LOGGER.info("search products");
 
         return productRepository.searchProducts(pageNumber, pageSize, searchTerm);
-    }
 
-    // get total products based on the search criteria
+    } // end of searchProducts()
+
+    // get total products(total elements) based on the search criteria
     public long getTotalElements(String searchTerm) {
 
         LOGGER.info("get total products based on the search criteria");
 
         return productRepository.getTotalElements(searchTerm);
-    }
+
+    } // end of getTotalElements()
 
     // find product by product id
     public Product findById(Long id) throws EntityNotFoundException {
@@ -48,6 +50,7 @@ public class ProductService {
         // find product by product id
         return productRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(NO_PRODUCT_FOUND_BY_ID + id));
-    }
+
+    } // end of findById()
 
 }

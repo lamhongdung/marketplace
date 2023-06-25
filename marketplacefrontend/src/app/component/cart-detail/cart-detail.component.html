@@ -9,8 +9,8 @@
                 <tr class="table-primary">
                     <th width="20%">Product Image</th>
                     <th width="35%">Product Detail</th>
-                    <th width="20%">Quantity</th>
-                    <th width="15%">Subtotal</th>
+                    <th width="20%" class="text-center">Quantity</th>
+                    <th width="15%" class="text-center">Subtotal</th>
                     <th width="10%"></th>
                 </tr>
             </thead>
@@ -29,7 +29,7 @@
                         <!-- product name -->
                         <p>{{ tempCartItem.name }}</p>
                         <!-- unit price -->
-                        <p style="color:blue">{{ tempCartItem.unitPrice | currency: 'VND' }}</p>
+                        <p class="text-primary">{{ tempCartItem.unitPrice | currency: 'VND' }}</p>
                     </td>
 
                     <!-- Quantity column -->
@@ -38,7 +38,7 @@
 
                             <!-- "-" button -->
                             <div class="col">
-                                <button (click)="decrementQuantity(tempCartItem)" class="btn btn-primary btn-sm">
+                                <button (click)="decreaseQuantity(tempCartItem)" class="btn btn-primary btn-sm">
                                     <i class="fas fa-minus"></i>
                                 </button>
                             </div>
@@ -50,7 +50,7 @@
 
                             <!-- "+" button -->
                             <div class="col">
-                                <button (click)="incrementQuantity(tempCartItem)" class="btn btn-primary btn-sm">
+                                <button (click)="increaseQuantity(tempCartItem)" class="btn btn-primary btn-sm">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
@@ -61,7 +61,7 @@
 
                     <!-- "Subtotal" column -->
                     <td>
-                        <p class="text-end">
+                        <p class="text-right">
                             {{ tempCartItem.quantity * tempCartItem.unitPrice! | currency: 'VND' }}
                         </p>
                     </td>
@@ -77,22 +77,22 @@
                 <tr>
 
                     <!-- Total column -->
-                    <td colspan="2" style="font-weight: bold; text-align: right;">
-                        <p class="text-end">Total</p>
+                    <td colspan="2">
+                        <p class="text-right font-weight-bold">Total</p>
                     </td>
 
                     <!-- Quantity column -->
-                    <td style="font-weight: bold">
-                        <p class="text-center">{{ totalQuantity }}</p>
+                    <td>
+                        <p class="text-center font-weight-bold">{{ totalQuantity }}</p>
                     </td>
 
                     <!-- Subtotal column -->
-                    <td style="font-weight: bold">
-                        <p class="text-end">{{ totalPrice | currency: 'VND' }}</p>
+                    <td>
+                        <p class="text-right font-weight-bold">{{ totalPrice | currency: 'VND' }}</p>
                     </td>
 
                     <!-- Checkout button -->
-                    <td style="font-weight: bold">
+                    <td>
                         <a routerLink="/checkout" class="btn btn-primary">
                             Checkout
                         </a>

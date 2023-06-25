@@ -15,3 +15,32 @@
 .navbar .logo {
     margin-right: 30px;
 }
+
+/* frame of checkout screen */
+.form-area {
+    position: relative;
+    margin-bottom: 45px;
+    padding: 50px 20px;
+    border: 1px solid #ccc
+}
+
+/* title frame of checkout screen */
+.form-area h4 {
+    position: absolute;
+    top: -26px;
+    left: 13px;
+    background: rgb(255, 255, 255);
+    padding: 10px 20px;
+    font-weight: 500;
+    z-index: 23;
+    display: inline-block
+}
+
+/* badge of cart quantity */
+.badge-notify {
+    background: red;
+    position: relative;
+    top: -18px;
+    left: -5px;
+    font-size: 10px;
+}

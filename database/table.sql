@@ -24,6 +24,7 @@ create table `product` (
   `imageUrl` varchar(255) default null,
   `active` bit default 1,
   `unitInStock` int default null,
+  -- 
   `dateCreated` datetime(6) default null,
   `lastUpdated` datetime(6) default null,
   
@@ -103,8 +104,8 @@ create table `orders` (
 	`orderTrackingNumber` varchar(255) default null,
 	`totalQuantity` int default null,
 	`totalPrice` decimal(19,2) default null,
+	-- 
 	`userId` int default null,
-	--
 	`email` varchar(255) not null,
 	`firstName` varchar(255) not null,
 	`lastName` varchar(255) not null,
@@ -114,7 +115,8 @@ create table `orders` (
 	`dateCreated` datetime(6) default null,
 	`lastUpdated` datetime(6) default null,
   
-	primary key(`id`)
+	primary key(`id`),
+    unique (`orderTrackingNumber`)
   
 ) engine=InnoDB auto_increment=2001 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
 

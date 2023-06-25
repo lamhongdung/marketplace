@@ -20,7 +20,7 @@ public class JwtAuthenticationEntryPoint extends Http403ForbiddenEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
-//        HttpResponse httpResponse = new HttpResponse(FORBIDDEN.value(), FORBIDDEN, FORBIDDEN.getReasonPhrase().toUpperCase(), FORBIDDEN_MESSAGE);
+
         HttpResponse httpResponse = new HttpResponse(FORBIDDEN.value(), FORBIDDEN_MESSAGE);
         response.setContentType(APPLICATION_JSON_VALUE);
         response.setStatus(FORBIDDEN.value());
@@ -28,5 +28,6 @@ public class JwtAuthenticationEntryPoint extends Http403ForbiddenEntryPoint {
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(outputStream, httpResponse);
         outputStream.flush();
+
     }
 }

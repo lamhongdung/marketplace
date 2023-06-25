@@ -14,7 +14,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Table(name="product")
+@Table(name = "product")
 public class Product {
 
     @Id
@@ -40,11 +40,13 @@ public class Product {
     @Column(name = "unitInStock")
     private int unitInStock;
 
+    // product was created on this datetime
     @Column(name = "dateCreated")
     // hibernate will auto manage the timestamps
     @CreationTimestamp
     private Date dateCreated;
 
+    // last time this product was updated on this datetime
     @Column(name = "lastUpdated")
     // hibernate will auto manage the timestamps
     @UpdateTimestamp

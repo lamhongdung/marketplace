@@ -9,49 +9,74 @@ import { CartService } from 'src/app/service/cart.service';
 })
 export class CartDetailComponent implements OnInit {
 
+  // cart details
   cartItems: CartItem[] = [];
+
+  // cart amount
   totalPrice: number = 0;
+
+  // cart quantity
   totalQuantity: number = 0;
 
-  constructor(private cartService: CartService) { }
+  constructor(
+    private cartService: CartService
+  ) { }
 
+  // post construction
   ngOnInit(): void {
-    this.listCartDetails();
-  }
 
+    this.listCartDetails();
+
+  } // end of ngOnInit()
+
+  // 
   listCartDetails() {
 
-    // get a handle to the cart items
+    // get cartItems from cartService
     this.cartItems = this.cartService.cartItems;
 
-    // get order amount
+    // get latest cart amount(total price)
     this.cartService.totalPrice
       .subscribe(
+
         data => this.totalPrice = data
+
       );
 
-    // get "total quantity"
+    // get latest "total quantity"
     this.cartService.totalQuantity
       .subscribe(
+
         data => this.totalQuantity = data
+
       );
 
     // compute cart total price and quantity
     this.cartService.computeCartTotals();
-  }
 
-  // increment quantity 1 to cart item
-  incrementQuantity(theCartItem: CartItem) {
+  } // end of listCartDetails()
+
+  // increment quantity 1 when user clicks the '+' button
+  increaseQuantity(theCartItem: CartItem) {
+
+    // add theCartItem to cart
     this.cartService.addToCart(theCartItem);
-  }
 
-  // decrement quantity 1 to cart item
-  decrementQuantity(theCartItem: CartItem) {
+  } // end of increaseQuantity()
+
+  // decrement quantity 1 when user clicks the '-' button
+  decreaseQuantity(theCartItem: CartItem) {
+
+    // decrease quantity of item theCartItem in cart
     this.cartService.decrementQuantity(theCartItem);
-  }
 
-  // remove item from cart
+  } // end of decreaseQuantity()
+
+  // remove cartItem from cart
   remove(theCartItem: CartItem) {
+
     this.cartService.remove(theCartItem);
-  }
+
+  } // end of remove()
+
 }

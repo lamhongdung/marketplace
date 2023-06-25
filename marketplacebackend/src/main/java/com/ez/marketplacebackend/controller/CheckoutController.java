@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class CheckoutController {
+
+    // proceed for place order and checkout
     private CheckoutService checkoutService;
 
     @Autowired
@@ -17,12 +19,13 @@ public class CheckoutController {
         this.checkoutService = checkoutService;
     }
 
+    // when user press "Purchase" button in "Checkout" screen
     @PostMapping("/purchase")
     public PurchaseResponse placeOrder(@RequestBody Purchase purchase) {
 
-        PurchaseResponse purchaseResponse = checkoutService.placeOrder(purchase);
+        PurchaseResponse purchaseResponse = checkoutService.purchase(purchase);
 
         return purchaseResponse;
-    }
+    } // end of placeOrder()
 
 }

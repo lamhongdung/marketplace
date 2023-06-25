@@ -34,7 +34,7 @@ public class ExceptionHandling implements ErrorController {
     private static final String EMAIL_OR_PASSWORD_IS_NOT_CORRECT = "Email or password is not correct. Please try again";
     private static final String NOT_ENOUGH_PERMISSION = "You do not have enough permission";
 
-    // handle error of "Whitelabel error page"
+    // handle error of "Whitelabel error page".
     public static final String ERROR_PATH = "/error";
 
     @ExceptionHandler(BadCredentialsException.class)
@@ -43,7 +43,7 @@ public class ExceptionHandling implements ErrorController {
     }
 
     // handle errors of invalid data.
-    // these errors are catched by "spring-boot-starter-validation".
+    // these errors are caught by "spring-boot-starter-validation".
     @ExceptionHandler(BindException.class)
     public ResponseEntity<HttpResponse> handleBindException(BindException e) {
 
@@ -68,7 +68,7 @@ public class ExceptionHandling implements ErrorController {
     }
 
     // handle errors of invalid data.
-    // these errors are catched own developer.
+    // these errors are caught own developer.
     @ExceptionHandler(BadDataException.class)
     public ResponseEntity<HttpResponse> badDataException(BadDataException exception) {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());

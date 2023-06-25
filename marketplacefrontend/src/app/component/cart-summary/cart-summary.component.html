@@ -1,13 +1,18 @@
+<!-- cart summary -->
 <li class="nav-item text-dark">
+
+    <!-- -->
     <a class="nav-link" routerLink="/cart-detail">
+
+        <!-- cart icon -->
         <i class="fa fa-shopping-cart text-light" aria-hidden="true">
 
-            <!-- total quantity -->
+            <!-- total quantity(cart quantity) -->
             <span class="badge badge-notify">
                 {{ totalQuantity }}
             </span>
 
-            <!-- order amount -->
+            <!-- total price(cart amount) -->
             <span class="badge bg-danger">
                 {{ totalPrice | currency: 'VND' }}
             </span>

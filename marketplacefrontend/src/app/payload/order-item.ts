@@ -1,5 +1,6 @@
 import { CartItem } from "./cart-item";
 
+// note: CartItem = OrderItem + product name
 export class OrderItem {
 
     imageUrl: string;

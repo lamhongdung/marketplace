@@ -18,7 +18,9 @@ public class MarketplacebackendApplication {
 
 	@Bean
 	public CorsFilter corsFilter() {
-		UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+
+		UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource =
+				new UrlBasedCorsConfigurationSource();
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
 		corsConfiguration.setAllowCredentials(true);
 		corsConfiguration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));

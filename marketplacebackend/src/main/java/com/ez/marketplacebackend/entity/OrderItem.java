@@ -33,6 +33,8 @@ public class OrderItem {
     @Column(name = "unitPrice")
     private BigDecimal unitPrice;
 
+    // many 'orderItem' belong to 1 'order'.
+    // @JoinColumn(name = "orderId"): 'orderId' is foreign key in table 'orderItem'
     @ManyToOne
     @JoinColumn(name = "orderId")
     private Order order;

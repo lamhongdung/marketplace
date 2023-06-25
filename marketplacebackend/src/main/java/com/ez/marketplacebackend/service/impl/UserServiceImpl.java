@@ -6,7 +6,6 @@ import com.ez.marketplacebackend.exception.BadDataException;
 import com.ez.marketplacebackend.payload.EditProfile;
 import com.ez.marketplacebackend.repository.UserRepository;
 import com.ez.marketplacebackend.service.UserService;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +34,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    // get user info by email
+    // get user info by email.
+    // This method returns the 'UserDetails' object.
+    // Spring security will use this 'UserDetails' object to
+    // authenticate [email, password] is sent from client is valid or not?
     @Override
     public UserDetails loadUserByUsername(String email) {
+
         LOGGER.info("load user by email");
 
         // get user by email
@@ -59,7 +62,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
             return userPrincipal;
         }
-    }
+
+    } // end of loadUserByUsername()
 
     // find user by id
     @Override
@@ -70,7 +74,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         // find user by user id
         return userRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(NO_USER_FOUND_BY_ID + id));
-    }
+
+    } // end of findById()
 
     // find user by email
     @Override
@@ -79,7 +84,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = userRepository.findUserByEmail(email);
 
         return user;
-    }
+
+    } // end of findUserByEmail()
 
     // check whether a user is inactive or not?
     // return:
@@ -91,7 +97,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = userRepository.isInactiveUser(email);
 
         return user;
-    }
+
+    } // end of isInactiveUser()
 
     // create new customer(customer signs up account).
     @Override
@@ -102,8 +109,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         // new user(customer)
         User newUser = new User();
 
-        // if email already existed then inform to user "Email already exists.
-        // Please choose another email."
+        // if email already existed then
+        // inform to user "Email already exists. Please choose another email."
         if (existEmail(user.getEmail())) {
 
             LOGGER.info("Email already exists. Please choose another email.");
@@ -131,7 +138,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.save(newUser);
 
         return newUser;
-    }
+
+    } // end of createUser()
 
     // update user profile
     @Override
@@ -153,7 +161,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.save(existingUser);
 
         return existingUser;
-    }
+
+    } // end of updateProfile()
 
     // check whether an email already existed or not?
     // return:
@@ -164,7 +173,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = findUserByEmail(email);
 
         return (user != null);
-    }
+
+    } // end of existEmail()
 
     // encode password
     private String encodePassword(String password) {
