@@ -21,7 +21,8 @@ export class AuthService {
   public jwtHelper = new JwtHelperService();
 
   // 'profile name' is displayed at the top-right corner.
-  // profileName = user id + user email.
+  // - if user already logged in: profileName = user id + user email.
+  // - if user has not yet logged in: profileName = "Guest".
   profileName: Subject<string> = new BehaviorSubject<string>("");
 
   // user id
@@ -31,8 +32,7 @@ export class AuthService {
     private http: HttpClient
   ) { }
 
-  // POST method: /login.
-  // when user clicks on the "Login" button
+  // when user clicks on the "Login" button in "Login" screen
   public login(loginUser: LoginUser): Observable<HttpResponse<User>> {
 
     return this.http.post<User>(`${this.host}/login`, loginUser, { observe: 'response' });
@@ -54,14 +54,14 @@ export class AuthService {
 
   } // end of logOut()
 
-  // save json web token into the local storage
+  // save json web token(jwt) into the local storage
   public saveTokenToLocalStorage(token: string): void {
 
     localStorage.setItem('token', token);
 
   } // end of saveTokenToLocalStorage()
 
-  // save the logged in user into the local strorage
+  // save the logged-in user into the local strorage
   public saveUserToLocalStorage(user: User): void {
 
     // save user object with json string format
@@ -174,4 +174,4 @@ export class AuthService {
 
   } // end of getProfileName()
 
-}
+} // end of class AuthService

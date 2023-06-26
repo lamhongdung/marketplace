@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Product } from '../payload/product';
 
@@ -11,8 +11,6 @@ import { Product } from '../payload/product';
 export class ProductService {
 
   // environment.apiUrl: "http://localhost:8080"
-  // private baseUrl = environment.apiUrl + '/products';
-  // private baseUrl = environment.apiUrl;
   host = environment.apiUrl;
 
   // inject httpClient
@@ -29,22 +27,23 @@ export class ProductService {
     return this.httpClient.get<Product[]>(
       `${this.host}/product-search?pageNumber=${pageNumber}&pageSize=${pageSize}&searchTerm=${searchTerm}`
     )
-  }
 
-  // calculate total products for counting total pages
+  } // end of searchProducts()
+
+  // calculate total products(total elements)
   getTotalProducts(searchTerm: string): Observable<number> {
 
     return this.httpClient.get<number>(
       `${this.host}/product-total-elements?searchTerm=${searchTerm}`
     );
 
-  }
+  } // end of getTotalProducts()
 
-  // find product by id
+  // find product by product id
   findById(id: number): Observable<Product> {
 
     return this.httpClient.get<Product>(`${this.host}/product-list/${id}`);
 
   } // end of findById()
 
-}
+} // end of class ProductService

@@ -11,14 +11,14 @@ export class CartService {
   cartItems: CartItem[] = [];
 
   // initial value of totalQuantity = 0.
-  // Subject is a subclass of observable.
+  // Subject is a subclass of Observable.
   // BehaviorSubject is a subclass of Subject.
   // When there is a certain subcriber subscribes to BehaviorSubject then
   // BehaviorSubject will publish latest value(not include passed values) to subscribers.
   totalQuantity: Subject<number> = new BehaviorSubject<number>(0);
 
   // initial value of totalPrice = 0.
-  // Subject is a subclass of observable.
+  // Subject is a subclass of Observable.
   // BehaviorSubject is a subclass of Subject.
   // When there is a certain subcriber subscribes to BehaviorSubject then
   // BehaviorSubject will publish latest value(not include passed values) to subscribers.
@@ -36,15 +36,15 @@ export class CartService {
     // - It removes null and undefined from a type without doing any explicit type checking.
     // - use this "!" operator to avoid error: 
     // "Argument of type 'string | null' is not assignable to parameter of type 'string'"
-    let data = JSON.parse(this.storage.getItem('cartItems')!);
+    let cartItems = JSON.parse(this.storage.getItem('cartItems')!);
 
     // if there are any items in cart
-    if (data != null) {
+    if (cartItems != null) {
 
-      // load cartItems from session storage into variable cartItems
-      this.cartItems = data;
+      // load cartItems from session storage into cartItems property
+      this.cartItems = cartItems;
 
-      // compute totals based on the data that is read from storage
+      // compute totals based on the cartItems that is read from storage
       this.computeCartTotals();
 
     }
@@ -57,12 +57,15 @@ export class CartService {
     // check if we already have the item in our cart
     let alreadyExistsInCart: boolean = false;
 
+    // cartItem which is existing in cart
     let existingCartItem: CartItem | undefined;
 
     // if cart is not empty
     if (this.cartItems.length > 0) {
 
+      //
       // find the item in the cart based on item id.
+      //
       // - if found: returns the value of the first element in the array where predicate is true
       // - else(not found): return "undefined".
       // <==> for(let tempCartItem of this.cartItems){
@@ -80,8 +83,12 @@ export class CartService {
 
     // if theCartItem already existed in cart then only increase quantity
     if (alreadyExistsInCart) {
-      // increment the quantity
+
+      // increment the quantity.
+      // because both existingCartItem and cartItems[i] refer to the same memory erea,
+      // so changes of existingCartItem value then also change of cartItems[i] value.
       existingCartItem!.quantity++;
+
     }
     else { // theCartItem has not yet existed in cart
 
@@ -90,11 +97,12 @@ export class CartService {
 
     }
 
-    // compute cart total price and total quantity
+    // compute cart total price(cart amount) and total quantity(cart quantity)
     this.computeCartTotals();
-  }
 
-  // compute cart total price and total quantity
+  } // end of addToCart()
+
+  // compute cart total price(cart amount) and total quantity(cart quantity)
   computeCartTotals() {
 
     let totalPriceValue: number = 0;
@@ -111,10 +119,10 @@ export class CartService {
 
     } // end of for()
 
-    // publish value of totalPriceValue to all subscribers(cartStatus).
+    // publish value of totalPriceValue to all subscribers(cartSummary).
     this.totalPrice.next(totalPriceValue);
 
-    // publish value of totalQuantityValue to all subscribers(cartStatus).
+    // publish value of totalQuantityValue to all subscribers(cartSummary).
     this.totalQuantity.next(totalQuantityValue);
 
     // log cart data just for debugging purposes
@@ -127,12 +135,16 @@ export class CartService {
 
   // save cartItems to session storage
   persistCartItems() {
-    this.storage.setItem('cartItems', JSON.stringify(this.cartItems));
-  }
 
+    this.storage.setItem('cartItems', JSON.stringify(this.cartItems));
+
+  } // end of persistCartItems()
+
+  // log cart data just for debugging purposes
   logCartData(totalPriceValue: number, totalQuantityValue: number) {
 
     console.log('Contents of the cart');
+
     for (let tempCartItem of this.cartItems) {
       const subTotalPrice = tempCartItem.quantity * tempCartItem.unitPrice!;
       console.log(`name: ${tempCartItem.name}, quantity=${tempCartItem.quantity}, unitPrice=${tempCartItem.unitPrice}, subTotalPrice=${subTotalPrice}`);
@@ -151,7 +163,10 @@ export class CartService {
 
     // if quantity == 0 then remove item from cart
     if (theCartItem.quantity === 0) {
+
+      // remove theCartItem from cartItems
       this.remove(theCartItem);
+
     }
     else { // re-compute cart total
 
@@ -179,4 +194,4 @@ export class CartService {
 
   } // end of remove()
 
-}
+} // end of class CartService
