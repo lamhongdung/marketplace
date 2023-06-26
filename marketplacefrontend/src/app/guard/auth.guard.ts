@@ -22,26 +22,33 @@ export class AuthGuard implements CanActivate {
   //    - false: do not allow to access the page
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
 
-    // check whether user already logged in or not?
+    // if user already logged-in
     if (this.isUserLoggedIn()) {
 
+      // get user role
       let role = this.authService.getRoleFromLocalStorage();
 
       console.log("role:" + role);
 
-      // if role is not correct
+      // if role is not correct then redirects to home page(/product-list)
       if (route.data['roles'].indexOf(role) === -1) {
 
         this.router.navigate(['/product-list'], {
           queryParams: { returnUrl: state.url }
         });
 
+        // does not allow to access the page
         return false;
 
-      }
+      } // end of 'if'
 
+      // if role is correct then allow to access the page
       return true;
     }
+
+    //
+    // if user has not yet logged in
+    //
 
     // if user has not yet logged in then re-direct to the "login" page
     this.router.navigate(['/login']);
@@ -52,10 +59,12 @@ export class AuthGuard implements CanActivate {
 
   } // end of canActivate()
 
-  // check whether user logged in or not
+  // check whether user logged in or not.
+  // =true: user already logged in.
+  // =false: user has not yet logged in
   private isUserLoggedIn(): boolean {
 
-    // if user logged in then return true(means allow to access the page)
+    // if user logged in then return true
     if (this.authService.isLoggedInUser()) {
 
       return true;
@@ -63,6 +72,7 @@ export class AuthGuard implements CanActivate {
     }
 
     return false;
+
   } // end of isUserLoggedIn()
 
-}
+} // end of class AuthGuard

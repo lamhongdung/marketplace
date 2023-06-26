@@ -29,45 +29,48 @@ export class ProductDetailComponent implements OnInit {
     private notifierService: NotifierService
   ) { }
 
-  // initial values
+  // this method is run right after component is constructed
   ngOnInit(): void {
 
     // get product id from params of the active route.
     // and then get product object based on product id from database
-    this.activatedRoute.paramMap.subscribe({
+    this.activatedRoute.paramMap
+      .subscribe({
 
-      next: (params: ParamMap) => {
+        // get product id successful
+        next: (params: ParamMap) => {
 
-        // get id from param of active route.
-        // ex: http://localhost:4200/product-list/:id
-        // ex: http://localhost:4200/product-list/1001
-        // the sign "+": use to convert from string to number
-        this.id = +params.get('id')!;
+          // get id from param of active route.
+          // ex: http://localhost:4200/product-list/:id
+          // ex: http://localhost:4200/product-list/1001
+          // the sign "+": use to convert from string to number
+          this.id = +params.get('id')!;
 
-        // get product by product id
-        this.productService.findById(this.id).subscribe({
+          // get product by product id
+          this.productService.findById(this.id)
+            .subscribe({
 
-          // if there is no error when get data from database
-          next: (data: Product) => {
+              // get product from database successful
+              next: (data: Product) => {
 
-            this.product = data;
+                this.product = data;
 
-          },
+              },
 
-          // if there is error when get data from database
-          error: (errorResponse: HttpErrorResponse) => {
+              // if there is error when get data from database
+              error: (errorResponse: HttpErrorResponse) => {
 
-            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+                this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
 
-          }
+              }
 
-        });
-      } // end of (params: ParamMap)
-    }); // end of this.activatedRoute.paramMap.subscribe()
+            });
+        } // end of (params: ParamMap)
+      }); // end of this.activatedRoute.paramMap.subscribe()
 
   } // end of ngOnInit()
 
-  // add product to cart
+  // add self-product to cart
   addToCart() {
 
     console.log(`Adding to cart: ${this.product.name}, ${this.product.unitPrice}`);
@@ -91,4 +94,4 @@ export class ProductDetailComponent implements OnInit {
 
   } // end of sendNotification()
 
-}
+} // end of class ProductDetailComponent

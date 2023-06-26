@@ -102,46 +102,49 @@ export class UserCreateComponent implements OnInit {
     this.showSpinner = true;
 
     // create user
-    this.userService.createUser(this.userForm.value).subscribe({
+    this.userService.createUser(this.userForm.value)
+      .subscribe({
 
-      // create user successful
-      next: (data: User) => {
+        // create user successful
+        next: (data: User) => {
 
-        this.user = data;
+          this.user = data;
 
-        // show successful message to user 
-        // this.sendNotification(NotificationType.SUCCESS, `${data.lastName} ${data.firstName} is created successfully`);
-        this.notifierService.notify(NotificationType.SUCCESS,
-          `${data.lastName} ${data.firstName} is created successfully`);
+          // show successful message to user 
+          this.sendNotification(NotificationType.SUCCESS,
+            `${data.lastName} ${data.firstName} is created successfully`);
+          // this.notifierService.notify(NotificationType.SUCCESS,
+          //   `${data.lastName} ${data.firstName} is created successfully`);
 
-        // hide spinner(circle)
-        this.showSpinner = false;
+          // hide spinner(circle)
+          this.showSpinner = false;
 
-        // navigate to the "product-list" page
-        this.router.navigateByUrl("/product-list");
-      },
+          // navigate to the "product-list" page
+          this.router.navigateByUrl("/product-list");
+        },
 
-      // create user failure(ex: email already existed,...)
-      error: (errorResponse: HttpErrorResponse) => {
+        // create user failure(ex: email already existed,...)
+        error: (errorResponse: HttpErrorResponse) => {
 
-        // show the error message to user
-        this.notifierService.notify(NotificationType.ERROR, errorResponse.error.message);
+          // show the error message to user
+          this.notifierService.notify(NotificationType.ERROR, errorResponse.error.message);
 
-        // hide spinner(circle)
-        this.showSpinner = false;
-      }
-    });
+          // hide spinner(circle)
+          this.showSpinner = false;
+        }
+      });
 
   } // end of createUser()
 
-  // // send notification to user
-  // private sendNotification(notificationType: NotificationType, message: string): void {
-  //   if (message) {
-  //     this.notificationService.notify(notificationType, message);
-  //   } else {
-  //     this.notificationService.notify(notificationType, 'An error occurred. Please try again.');
-  //   }
-  // }
+  // send notification to user
+  private sendNotification(notificationType: NotificationType, message: string): void {
 
+    if (message) {
+      this.notifierService.notify(notificationType, message);
+    } else {
+      this.notifierService.notify(notificationType, 'An error occurred. Please try again.');
+    }
+
+  } // end of sendNotification()
 
 } // end of the UserCreateComponent class

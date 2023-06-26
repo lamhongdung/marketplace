@@ -60,15 +60,10 @@ export class ProductListComponent implements OnInit {
     // search products
     this.searchProducts(this.thePageNumber, this.thePageSize, this.searchProduct.value.searchTerm!);
 
-
   } // end of ngOnInit()
 
   // get products, total products
   searchProducts(pageNumber: number, pageSize: number, searchTerm: string) {
-
-    // console.log(`pageNumber: ${pageNumber}`);
-    // console.log(`pageSize: ${pageSize}`);
-    // console.log(`searchTerm: ${searchTerm}`);
 
     // get products
     this.productService.searchProducts((pageNumber - 1) * pageSize, pageSize, searchTerm)
@@ -77,7 +72,9 @@ export class ProductListComponent implements OnInit {
 
         // get products successful
         next: (data: Product[]) => {
+
           return this.products = data
+
         },
 
         // there are some errors when get products
@@ -142,12 +139,14 @@ export class ProductListComponent implements OnInit {
 
   // send notification to user
   private sendNotification(notificationType: NotificationType, message: string): void {
+
     if (message) {
       this.notifierService.notify(notificationType, message);
     } else {
       this.notifierService.notify(notificationType, 'An error occurred. Please try again.');
     }
+
   } // end of sendNotification()
 
-}
+} // end of class ProductListComponent
 

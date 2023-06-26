@@ -1,10 +1,12 @@
-// import { Customer } from "./customer";
 import { Order } from "./order";
 import { OrderItem } from "./order-item";
 
 export class Purchase {
 
+    // order header
     order!: Order;
-    orderItems!: OrderItem[]; 
-    
+
+    // order details
+    orderItems!: OrderItem[];
+
 }

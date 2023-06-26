@@ -7,7 +7,6 @@ import { HeaderType } from 'src/app/enum/HeaderType';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { User } from 'src/app/payload/user';
 import { AuthService } from 'src/app/service/auth.service';
-import { ShareService } from 'src/app/service/share.service';
 
 @Component({
   selector: 'app-login',
@@ -47,13 +46,13 @@ export class LoginComponent implements OnInit {
     // initial form
     this.initForm();
 
-    // if user already logged in before then navigate to '/product-list'(absoluate path)
+    // if user already logged-in before then navigate to '/product-list'
     if (this.authService.isLoggedInUser()) {
 
       // navigate to '/product-list';
       this.router.navigateByUrl(this.authService.urlAfterLogin);
 
-    } else { // if user has not yet logged in then re-direct to '/login'
+    } else { // if user has not yet logged-in then re-direct to '/login'
 
       // navigate to the "/login" page
       this.router.navigateByUrl('/login');
@@ -101,6 +100,7 @@ export class LoginComponent implements OnInit {
           +this.authService.getIdFromLocalStorage(),
           this.authService.getEmailFromLocalStorage());
 
+        // publish userid to all subscribers
         this.authService.userid.next(+this.authService.getIdFromLocalStorage());
 
         // navigate to url '/product-list'
@@ -118,6 +118,7 @@ export class LoginComponent implements OnInit {
           +this.authService.getIdFromLocalStorage(),
           this.authService.getEmailFromLocalStorage());
 
+        // publish userid to all subscribers
         this.authService.userid.next(+this.authService.getIdFromLocalStorage());
 
         // show error message
@@ -141,4 +142,4 @@ export class LoginComponent implements OnInit {
     }
   } // end of sendErrorNotification()
 
-}
+} // end of class 'LoginComponent'

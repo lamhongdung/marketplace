@@ -37,7 +37,7 @@
 
                                     <small>{{e.message}}</small>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -46,8 +46,9 @@
                     <div class="row mb-3">
                         <!-- label -->
                         <div class="col-4">
-                            <label class="col-form-label" for="password">Password<small
-                                    class="text-danger">*</small></label>
+                            <label class="col-form-label" for="password">
+                                Password<small class="text-danger">*</small>
+                            </label>
                         </div>
                         <!-- textbox -->
                         <div class="col-8">
@@ -68,8 +69,9 @@
                     <div class="row mb-3">
                         <!-- label -->
                         <div class="col-4">
-                            <label class="col-form-label" for="firstName">First name<small
-                                    class="text-danger">*</small></label>
+                            <label class="col-form-label" for="firstName">
+                                First name<small class="text-danger">*</small>
+                            </label>
                         </div>
                         <!-- textbox -->
                         <div class="col-8">
@@ -77,8 +79,9 @@
                                 id="firstName">
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.firstName">
-                                <div
-                                    *ngIf="userForm.get('firstName')?.hasError(e.type) && (userForm.get('firstName')?.dirty || userForm.get('firstName')?.touched)">
+                                <div *ngIf="userForm.get('firstName')?.hasError(e.type) && 
+                                    (userForm.get('firstName')?.dirty || userForm.get('firstName')?.touched)">
+
                                     <small>{{e.message}}</small>
                                 </div>
                             </div>
@@ -105,8 +108,9 @@
                                 id="lastName">
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.lastName">
-                                <div
-                                    *ngIf="userForm.get('lastName')?.hasError(e.type) && (userForm.get('lastName')?.dirty || userForm.get('lastName')?.touched)">
+                                <div *ngIf="userForm.get('lastName')?.hasError(e.type) && 
+                                    (userForm.get('lastName')?.dirty || userForm.get('lastName')?.touched)">
+
                                     <small>{{e.message}}</small>
                                 </div>
                             </div>
@@ -127,8 +131,9 @@
                                 placeholder="ex: 0987654321(10 digits)" id="phone">
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.phone">
-                                <div
-                                    *ngIf="userForm.get('phone')?.hasError(e.type) && (userForm.get('phone')?.dirty || userForm.get('phone')?.touched)">
+                                <div *ngIf="userForm.get('phone')?.hasError(e.type) && 
+                                    (userForm.get('phone')?.dirty || userForm.get('phone')?.touched)">
+
                                     <small>{{e.message}}</small>
                                 </div>
                             </div>
@@ -150,7 +155,9 @@
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.shippingAddress">
                                 <div
-                                    *ngIf="userForm.get('shippingAddress')?.hasError(e.type) && (userForm.get('shippingAddress')?.dirty || userForm.get('shippingAddress')?.touched)">
+                                    *ngIf="userForm.get('shippingAddress')?.hasError(e.type) && 
+                                    (userForm.get('shippingAddress')?.dirty || userForm.get('shippingAddress')?.touched)">
+
                                     <small>{{e.message}}</small>
                                 </div>
                             </div>

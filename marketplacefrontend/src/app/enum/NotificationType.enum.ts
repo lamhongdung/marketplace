@@ -1,3 +1,4 @@
+// notification type of 'angular-notifier'
 export enum NotificationType {
 
     DEFAULT = 'default',

@@ -17,6 +17,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(httpRequest: HttpRequest<any>, httpHandler: HttpHandler): Observable<HttpEvent<any>> {
 
+    // the following links do not need to attach JWT in requests
     if (httpRequest.url.includes(`${this.authService.host}/login`) ||
       (httpRequest.url.includes(`${this.authService.host}/signup`)) ||
       (httpRequest.url.includes(`${this.authService.host}/product-list`)) ||
@@ -30,8 +31,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     }
 
-    // this.authService.loadToken();
-    // const token = this.authService.getToken();
+    // get token from local storage
     const token = this.authService.getTokenFromLocalStorage();
 
     // add token in the header of the request
@@ -41,6 +41,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return httpHandler.handle(request);
 
-  }
+  } // end of intercept()
 
-}
+} // end of class AuthInterceptor

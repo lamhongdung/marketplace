@@ -1,7 +1,7 @@
 <!-- the "Product list" screen -->
 <div class="container-fluid">
 
-    <!-- search function -->
+    <!-- search section -->
     <div class="container-fluid">
 
         <!-- Search Form -->
@@ -52,7 +52,7 @@
                             <h5 class="card-title">{{ tempProduct.name }}</h5>
                         </a>
                         <!-- product price -->
-                        <p class="card-title" style="color:blue">
+                        <p class="card-title text-primary">
                             {{ tempProduct.unitPrice | currency:'VND' }}
                         </p>
                         <!-- 'Add to cart' button -->
@@ -63,7 +63,7 @@
                 </div>
             </div>
 
-            <!-- if products is null/undefine or products.length == 0 then display a message -->
+            <!-- if products.length == 0(products is null/undefine) then display a message -->
             <div *ngIf="products?.length == 0" class="alert alert-info col-md-12">
                 There are no products contain string '{{this.searchProduct.value.searchTerm!}}'.
             </div>
